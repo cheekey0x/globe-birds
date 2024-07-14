@@ -1,0 +1,223 @@
+#h-bevel-1 {
+  width: 5760px;
+  height: 5px;
+  position: absolute;
+  background-color: red;
+  top: 1080px;
+  left: 0px;
+  z-index: 1000;
+}
+#h-bevel-2 {
+  width: 5760px;
+  height: 5px;
+  position: absolute;
+  background-color: red;
+  top: 2160px;
+  left: 0px;
+  z-index: 1000;
+}
+#v-bevel-1 {
+  width: 5px;
+  height: 3240px;
+  position: absolute;
+  background-color: red;
+  top: 0px;
+  left: 1920px;
+  z-index: 1001;
+}
+#v-bevel-2 {
+  width: 5px;
+  height: 3240px;
+  position: absolute;
+  background-color: red;
+  top: 0px;
+  left: 3840px;
+  z-index: 1001;
+}
+#recent-sightings .owl-dots {
+  display: none;
+}
+body {
+  font-family: "canada-type-gibson", sans-serif;
+  font-weight: 200;
+}
+a {
+  -webkit-transition: .3s all ease;
+  -o-transition: .3s all ease;
+  transition: .3s all ease;
+}
+a, a:hover {
+  text-decoration: none !important;
+}
+.outer-container {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  max-width: 5760px !important;
+  width: 5760px !important;
+  height: 3240px;
+  padding: 0;
+  margin: 0;
+}
+#potential-birds {
+margin-left: auto;
+	margin-right: auto;
+  width: 1500px;
+  height: 800px;
+	font-size: 40px;
+	text-align: center;
+	line-height: 44px;
+}
+#potential-birds .owl-item {
+width: 300px !important;
+max-width: 300px !important;
+	height: 300px !important;
+}
+
+
+
+#potential-birds .owl-item .rounded-circle{
+width: 270px !important;
+max-width: 270px !important;
+	height: 270px !important;
+	margin-left: 20px;
+	margin-top: 60px;
+		margin-bottom: 20px;
+}
+
+
+
+
+#potential-birds .owl-item img{
+width: 180px !important;
+height: 180px !important;
+margin-top: 30px;
+	margin-left: 30px;
+
+}
+
+
+#step-2-image .rounded-circle{
+width: 400px !important;
+max-width: 400px !important;
+	height: 400px !important;
+}
+
+#step-2-image img{
+width: 260px !important;
+height: 260px !important;
+margin-top: 60px;
+	margin-left: 10px;
+
+}
+
+
+
+.content {
+  padding: 7rem 0;
+}
+h2 {
+  font-size: 20px;
+}
+.bg-left-half {
+  position: relative;
+}
+.bg-left-half:before {
+  position: absolute;
+  width: 50%;
+  height: 100%;
+  z-index: -1;
+  content: "";
+  left: 0;
+  top: 0;
+  background-color: #f8f9fa;
+}
+.media-29101 img {
+  margin-bottom: 20px;
+}
+.media-29101 h3 {
+  font-size: 18px;
+  font-weight: 900 !important;
+}
+.media-29101 h3 a {
+  color: #6c757d;
+}
+.owl-2-style .owl-nav {
+  display: none;
+}
+.owl-2-style .owl-dots {
+  text-align: center;
+  position: relative;
+  bottom: -30px;
+}
+.owl-2-style .owl-dots .owl-dot {
+  display: inline-block;
+}
+.owl-2-style .owl-dots .owl-dot span {
+  display: inline-block;
+  width: 15px;
+  height: 3px;
+  border-radius: 0px;
+  background: #cccccc;
+  -webkit-transition: 0.3s all cubic-bezier(0.32, 0.71, 0.53, 0.53);
+  -o-transition: 0.3s all cubic-bezier(0.32, 0.71, 0.53, 0.53);
+  transition: 0.3s all cubic-bezier(0.32, 0.71, 0.53, 0.53);
+  margin: 3px;
+}
+.owl-2-style .owl-dots .owl-dot.active span {
+  background: #007bff;
+}
+.owl-2-style .owl-dots .owl-dot:active, .owl-2-style .owl-dots .owl-dot:focus {
+  outline: none;
+}
+
+
+#carousel-wrapper {
+  position: relative;
+  padding: 0 20px; /* Ensure there's room for labels */
+}
+
+.carousel-label {
+  position: absolute;
+  bottom: 0%; /* Adjust based on your design, possibly aligning just below the carousel */
+  color: #fff; /* Text color */
+  background: #333; /* Background color */
+  padding: 3px 7px;
+  border-radius: 5px;
+  font-size: 12px;
+}
+
+.left-label {
+  left: 20%;
+}
+
+.right-label {
+  right: 20%;
+}
+
+
+
+.owl-2-style .owl-dots {
+  text-align: center;
+  position: relative;
+  bottom: -30px; }
+  .owl-2-style .owl-dots .owl-dot {
+    display: inline-block; }
+    .owl-2-style .owl-dots .owl-dot span {
+      display: inline-block;
+      width: 15px;
+      height: 3px;
+      border-radius: 0px;
+      background: #cccccc;
+      -webkit-transition: 0.3s all cubic-bezier(0.32, 0.71, 0.53, 0.53);
+      -o-transition: 0.3s all cubic-bezier(0.32, 0.71, 0.53, 0.53);
+      transition: 0.3s all cubic-bezier(0.32, 0.71, 0.53, 0.53);
+      margin: 3px; }
+    .owl-2-style .owl-dots .owl-dot.active span {
+      background: #007bff; }
+    .owl-2-style .owl-dots .owl-dot:active, .owl-2-style .owl-dots .owl-dot:focus {
+      outline: none; }
+
+
+
+

@@ -1,0 +1,1010 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <link rel="stylesheet" href="css/owl.carousel.min.css" />
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="css/bootstrap.min.css" />
+
+  <!-- Style -->
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="./font.otf" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <link rel="stylesheet" href="https://use.typekit.net/gxw1gdu.css" />
+
+  <title>bird</title>
+  <style>
+    * {
+      -ms-touch-action: none;
+      touch-action: none;
+      -webkit-tap-highlight-color: transparent;
+      -webkit-touch-callout: none;
+      -webkit-user-select: none;
+      -khtml-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+      outline: none !important;
+    }
+
+    body,
+    html {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+    }
+
+    body .layout {
+      /* width: 100vw !important; */
+      height: 56.25vw !important;
+      /* max-width: 100vw !important; */
+      max-height: 56.25vw !important;
+    }
+
+    .footer {
+      text-align: center;
+      /* Align the text in the center */
+      padding: 20px;
+      /* Add some padding for spacing */
+    }
+
+    .flash-effect {
+      width: 75%;
+      font-size: 36px;
+      /* Set the font size */
+      font-weight: bold;
+      /* Make the text bold */
+      color: #333;
+      /* Set the text color */
+      background-color: #ffc107;
+      /* Set the background color */
+      padding: 20px 30px;
+      /* Add padding */
+      border-radius: 5px;
+      /* Add rounded corners */
+      display: inline-block;
+      animation: fadeOpacity 3s ease-in-out;
+      animation-iteration-count: infinite;
+      margin: auto;
+      text-align: center;
+    }
+
+    @keyframes fadeOpacity {
+      from {
+        opacity: 1;
+      }
+
+      to {
+        opacity: 0;
+      }
+    }
+
+    .owl-2-style .owl-dots {
+      bottom: 0;
+    }
+
+    iframe {
+      display: block;
+    }
+
+    .special-height .owl-stage-outer,
+    .special-height .owl-stage,
+    .special-height .owl-item {
+      height: 100%;
+    }
+
+    .special-height .owl-dots {
+      bottom: 40px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="outer-container">
+    <!--    <div id="h-bevel-1"></div>
+      <div id="h-bevel-2"></div>
+      <div id="v-bevel-1"></div>
+      <div id="v-bevel-2"></div> -->
+
+    <div id="globe-arrow-l">
+      <img src="CLO_Globe_Arrow-L.png" width="70" height="70" alt="" />
+    </div>
+    <div id="globe-arrow-r">
+      <img src="CLO_Globe_Arrow-R.png" width="70" height="70" alt="" />
+    </div>
+
+    <div class="layout row p-0 m-0">
+      <div class="col-md-4 p-0">
+        <div class="sighting" style="
+              height: 3240px;
+              display: flex;
+              flex-direction: column;
+              justify-content: space-between;
+            ">
+          <div class="container d-none">
+            <form class="row d-none align-items-center" onsubmit="submitForm(event)">
+              <div class="form-group col-md-3">
+                <label for="latitude">Latitude</label>
+                <input type="number" class="form-control" id="latitude" placeholder="Enter latitude" step="any"
+                  value="42.478572" />
+              </div>
+
+              <div class="form-group col-md-3">
+                <label for="longitude">Longitude</label>
+                <input type="number" class="form-control" id="longitude" placeholder="Enter longitude" step="any"
+                  value="-76.45152" />
+              </div>
+
+              <div class="form-group col-md-3">
+                <label for="distance">Distance</label>
+                <input type="number" class="form-control" id="distance" placeholder="Enter distance" step="any"
+                  value="1" />
+              </div>
+
+              <div class="form-group col-md-3">
+                <button id="submit" type="submit" class="btn btn-primary mt-4">
+                  Search
+                </button>
+              </div>
+            </form>
+          </div>
+
+          <div class="site-section" style="height: 2160px !important">
+            <div class="owl-2-style special-height" style="height: 2160px">
+              <div class="owl-carousel owl-2" id="recent-sightings" style="height: 100%"></div>
+            </div>
+          </div>
+
+          <div class="site-section" style="
+                background-color: rgba(255, 188, 16, 1);
+
+                display: flex;
+                align-items: center;
+              ">
+            <div class="container owl-2-style p-2 step-0" style="
+                  background-color: rgba(255, 188, 16, 1);
+                  max-width: 1920px !important;
+                  height: 1080px !important;
+                  margin-top: 0px;
+                ">
+              <div style="
+                    position: absolute;
+                    width: 1920px;
+                    text-align: center;
+                    font-size: 64px;
+                    margin-top: 808px;
+                  ">
+                Swipe and Tap To Share Your Observations
+              </div>
+              <h2 class="text-primary py-4 text-center" style="
+                    margin-top: 52px;
+                    font-size: 88px;
+                    text-align: center;
+                    color: #2d2620 !important;
+                    font-weight: 200;
+                  ">
+                Which Birds Did You Observe Here Today?
+              </h2>
+
+              <div id="carousel-wrapper" style="
+                    width: 80%;
+                    margin-left: auto;
+                    margin-right: auto;
+                    margin-top: 50px;
+                    height: 400px;
+                  ">
+                <div class="owl-carousel owl-3" id="potential-birds"></div>
+                <div class="carousel-label left-label">Likely</div>
+                <div class="carousel-label right-label">Rare</div>
+              </div>
+            </div>
+            <!-- <div
+              class="container owl-2-style p-2 d-none step-1"
+              style="
+                background-color: #2e261f;
+                border-radius: 30px;
+                color: white;
+              "
+            >
+              <h2 class="text-primary pt-4 text-center" style="font-size: 24px">
+                Step 2: Choose Where You Saw It
+              </h2>
+              <button
+                onclick="beforeStep()"
+                class="btn text-center mt-2 mb-4 m-auto px-5 py-0"
+                style="
+                  display: block;
+                  margin-bottom: 25px !important;
+                  background-color: #ddd;
+                  color: #2e261f;
+                  border-radius: 30px;
+                "
+              >
+                BACK
+              </button>
+
+              <div
+                class="owl-carousel owl-4"
+                id="potential-birds-position"
+              ></div>
+            </div> -->
+            <div class="container owl-2-style p-2 step-2 d-none" style="
+                  background-color: rgba(255, 188, 16, 1);
+                  max-width: 1920px !important;
+                  height: 1080px !important;
+                  margin-top: 0px;
+                ">
+              <h2 class="text-primary pt-4 text-center" style="
+                    margin-top: 50px;
+                    margin-bottom: 50px;
+                    font-size: 88px;
+                    text-align: center;
+                    color: #2d2620 !important;
+                    font-weight: 200;
+                  ">
+                Step 2: Confirm
+              </h2>
+              <div class="m-auto text-center">
+                <button onclick="beforeStep()" class="btn text-center mt-2 mb-4 m-auto py-0 mr-4" style="
+                      font-size: 36px;
+                      display: inline;
+                      margin-bottom: 40px !important;
+                      background-color: #2d2620;
+                      color: #ffffff;
+                      border-radius: 45px;
+                      width: 400px;
+                      padding-top: 10px !important;
+                      padding-bottom: 10px !important;
+                      margin-right: 10px !important;
+                    ">
+                  BACK
+                </button>
+                <button onclick="finalStep()" class="btn text-center mt-2 mb-4 m-auto py-0" style="
+                      font-size: 36px;
+                      display: inline;
+                      margin-bottom: 40px !important;
+                      background-color: #2d2620;
+                      color: #ffffff;
+                      width: 400px;
+                      border-radius: 45px;
+                      padding-top: 10px !important;
+                      padding-bottom: 10px !important;
+                      margin-left: 10px !important;
+                    ">
+                  CONFIRM
+                </button>
+              </div>
+              <div class="step-2-image m-auto text-center mb-4 d-flex justify-content-center" id="step-2-image"></div>
+            </div>
+            <div class="container owl-2-style p-2 step-3 d-none" style="
+                  background-color: rgba(255, 188, 16, 1);
+                  max-width: 1920px !important;
+                  height: 1080px !important;
+                  margin-top: 0px;
+                  color: white;
+                ">
+              <h2 class="text-primary pt-4 text-center" style="
+                    margin-top: 50px;
+                    margin-bottom: 30px;
+                    font-size: 100px;
+                    text-align: center;
+                    color: #2d2620 !important;
+                    font-weight: 200;
+                  ">
+                Thank you!
+              </h2>
+              <div style="
+                    position: absolute;
+                    width: 1920px;
+                    text-align: center;
+                    font-size: 64px;
+                    margin-top: 530px;
+                  ">
+                <img src="powered-by-merlin.png" width="681" height="122" alt="" />
+              </div>
+              <div class="text-center" style="
+                    margin-top: 50px;
+                    margin-bottom: 0px;
+                    font-size: 70px;
+                    text-align: center;
+                    color: #2d2620 !important;
+                    font-weight: 200;
+                  ">
+                You are #<span id="sighting-number" style="font-weight: 500">1</span>
+              </div>
+              <div class="text-center" style="
+                    margin-top: 0px;
+                    margin-bottom: 70px;
+                    font-size: 70px;
+                    text-align: center;
+                    color: #2d2620 !important;
+                    font-weight: 200;
+                  ">
+                Check out your observation on the big screen
+              </div>
+              <div class="text-center my-4">
+                <button class="text-center btn btn-success" style="
+                      border: 0px;
+                      background-color: #2d2620;
+                      font-size: 70px;
+                      border-radius: 45px;
+                      width: 360px;
+                      margin-top: 10px;
+                      margin-bottom: 10px;
+                    " onclick="setfinished()">
+                  Next
+                </button>
+              </div>
+            </div>
+            <!-- <footer class="footer">
+            <div class="flash-effect thank-you d-none">Thank you</div>
+          </footer> -->
+          </div>
+        </div>
+      </div>
+      <div class="col-md-8 p-0" style="height: 3240px !important">
+        <iframe src="globe.html" width="100%" height="100%" frameborder="0" scrolling="hidden"
+          id="globeIframe"></iframe>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/jquery-3.3.1.min.js"></script>
+  <script src="js/popper.min.js"></script>
+  <script src="js/bootstrap.min.js"></script>
+  <script src="js/bootstrap.min.js"></script>
+  <script src="js/owl.carousel.min.js"></script>
+  <script src="js/moment.js" defer></script>
+  <script>
+    const apiKey = "3pn0jnrpfjre";
+
+    async function getRecentSightings(lat, lng, dist, maxResults) {
+      const url = `https://api.ebird.org/v2/data/obs/geo/recent?lat=${lat}&lng=${lng}&dist=${dist}&category=species&includeProvisional=false&maxResults=${maxResults}`;
+      const headers = new Headers({
+        "X-eBirdApiToken": apiKey,
+      });
+
+      try {
+        const response = await fetch(url, { headers });
+        const data = await response.json();
+        let speciesArr = [];
+        for (let i = 0; i < data.length; i++) {
+          speciesArr.push(data[i].speciesCode);
+        }
+        const speciesString = speciesArr.join(",");
+        const result = await getBirdPhoto(speciesString);
+        const res = data.map((item, idx) => {
+          return {
+            ...item,
+            photoSrc: `https://cdn.download.ams.birds.cornell.edu/api/v2/asset/${result[item.speciesCode]?.assetId
+              }/2400`,
+            userDisplayName: result[item.speciesCode]?.userDisplayName
+          };
+        });
+        return res;
+      } catch (error) {
+        console.error("Error fetching recent sightings:", error);
+      }
+    }
+
+    async function getBirdPhoto(speciesCode) {
+      var url =
+        "https://merlinglobe-1ab0512223a0.herokuapp.com/api/get_bird_photo";
+      const params = {
+        key: "PUB1258538706",
+        speciesCode: speciesCode,
+        mediaType: "illustration",
+      };
+      try {
+        const queryString = new URLSearchParams(params).toString();
+        const response = await fetch(`${url}?${queryString}`);
+        return await response.json();
+      } catch (error) {
+        console.error("Error fetching", error);
+      }
+    }
+
+    const submitForm = async (event) => {
+      event.preventDefault();
+      const pageCount = 50;
+      const rowCount = 5;
+      const lat = document.getElementById("latitude").value;
+      const lng = document.getElementById("longitude").value;
+      const dist = document.getElementById("distance").value;
+      const maxResults = 50;
+      const recentSightings = await getRecentSightings(
+        lat,
+        lng,
+        dist,
+        maxResults
+      );
+      recentSightings.sort((a, b) => b.howMany - a.howMany);
+
+      let html = "";
+      for (let i = 0; i < recentSightings.length; i++) {
+        const item = recentSightings[i];
+        if (i % 5 == 0)
+          html += `<div class="d-flex justify-content-between">`;
+        html += `<div onclick="addAppearedBird('${item.photoSrc}','${item.comName}','${item.speciesCode}')" style="text-align: center; maring:auto; flex: 1;" class="" >`;
+        html +=
+          "<div class='rounded-circle bg-white' style='padding: 10px; width: 60px; height: 60px; margin:auto;'>";
+        html +=
+          '<img src="' +
+          item.photoSrc +
+          '" style="width: 40px; height: 40px; margin: auto;" class="" />';
+        html += "</div>";
+        html += "<div>" + item.comName + "</div>";
+        html += "</div>";
+        if (i % 5 == 4) html += `</div>`;
+      }
+      $("#potential-birds").html(html);
+      if ($("#potential-birds").length > 0) {
+        $("#potential-birds").owlCarousel({
+          center: false,
+          items: 1,
+          loop: true,
+          margin: 20,
+          smartSpeed: 1500,
+          autoplayTimeout: 20000,
+          autoplay: true,
+          nav: true,
+          dots: true,
+          navText: [
+            '<div class="nav-btn prev-slide" style="font-size:120px; padding-top:10px; margin-left:-95px; color:#2c2621;">&#10094;</div>',
+            '<div class="nav-btn next-slide" style="font-size:120px; padding-top:10px; margin-left:55px; color:#2c2621;">&#10095;</div>',
+          ],
+          responsive: {
+            600: {
+              items: 1,
+            },
+            1000: {
+              items: 1,
+            },
+          },
+        });
+
+        $(".owl-dots .owl-dot span")
+          .css("height", "12px")
+          .css("width", "12px"); // Enlarge the dots
+      }
+    };
+
+    (() => {
+      document.getElementById("submit").click();
+
+      let html = "";
+      // const positionList = [
+      //   {
+      //     fullName: "Sapsucker Woods-Lab Building Area",
+      //     name: "Building",
+      //   },
+      //   {
+      //     fullName: "Sapsucker Woods-Wilson Trail North",
+      //     name: "Trail",
+      //   },
+      //   {
+      //     fullName: "Sapsucker Woods-Duemling Meadows",
+      //     name: "Meadows",
+      //   },
+      //   {
+      //     fullName: "Sapsucker Woods-CLO Deck",
+      //     name: "Deck",
+      //   },
+      //   {
+      //     fullName: "Sapsucker Woods-Mt. ",
+      //     name: "Sapsucker",
+      //   },
+      //   {
+      //     fullName: "Sapsucker Woods-Lab Building Area",
+      //     name: "Building",
+      //   },
+      //   {
+      //     fullName: "Sapsucker Woods-Wilson Trail North",
+      //     name: "Trail",
+      //   },
+      //   {
+      //     fullName: "Sapsucker Woods-Duemling Meadows",
+      //     name: "Meadows",
+      //   },
+      //   {
+      //     fullName: "Sapsucker Woods-CLO Deck",
+      //     name: "Deck",
+      //   },
+      //   {
+      //     fullName: "Sapsucker Woods-Mt. ",
+      //     name: "Sapsucker",
+      //   },
+      // ];
+      // for (let i = 0; i < positionList.length; i++) {
+      //   const item = positionList[i];
+      //   html += `<div onclick="addAppearedBirdStep2('${item.fullName}')" class="" title="${item.fullName}" >`;
+      //   html +=
+      //     '<img src="./position.jpg" style="width: 60px; height: 60px" class="rounded-circle" />';
+      //   html += "<div>" + item.name + "</div>";
+      //   html += "</div>";
+      // }
+      // $("#potential-birds-position").html(html);
+      // if ($("#potential-birds-position").length > 0) {
+      //   $("#potential-birds-position").owlCarousel({
+      //     center: false,
+      //     items: 1,
+      //     loop: true,
+      //     stagePadding: 0,
+      //     margin: 20,
+      //     smartSpeed: 5500,
+      //     autoplay: true,
+      //     nav: true,
+      //     dots: true,
+      //     pauseOnHover: false,
+      //     responsive: {
+      //       600: {
+      //         margin: 20,
+      //         nav: true,
+      //         items: 5,
+      //       },
+      //       1000: {
+      //         margin: 20,
+      //         stagePadding: 0,
+      //         nav: true,
+      //         items: 5,
+      //       },
+      //     },
+      //   });
+      // }
+    })();
+  </script>
+  <script>
+    const serverURL = "https://merlinglobe-1ab0512223a0.herokuapp.com";
+    // const serverURL = "http://localhost:8000";
+
+    gUrl = "";
+    gName = "";
+    gSpeciesCode = "";
+    gPosition = "";
+    STEP = 0;
+    const addAppearedBird = (_url, _name, _speciesCode) => {
+      gUrl = _url;
+      gName = _name;
+      gSpeciesCode = _speciesCode;
+      STEP = 1;
+      $(".step-0").addClass("d-none");
+      $(".step-1").addClass("d-none");
+      $(".step-2").removeClass("d-none");
+      addAppearedBirdStep2("test", gName);
+
+      const iframe = document.getElementById("globeIframe");
+      function sendMessageToIframe(message) {
+        if (iframe && iframe.contentWindow) {
+          iframe.contentWindow.postMessage(message, "*");
+        }
+      }
+      sendMessageToIframe(STEP);
+    };
+
+    const beforeStep = () => {
+      STEP = 0;
+      if (STEP == 0) {
+        $(".step-0").removeClass("d-none");
+        $(".step-1").addClass("d-none");
+        $(".step-2").addClass("d-none");
+      }
+      if (STEP == 1) {
+        $(".step-0").addClass("d-none");
+        $(".step-1").removeClass("d-none");
+        $(".step-2").addClass("d-none");
+      }
+      const iframe = document.getElementById("globeIframe");
+      function sendMessageToIframe(message) {
+        if (iframe && iframe.contentWindow) {
+          iframe.contentWindow.postMessage(message, "*");
+        }
+      }
+      sendMessageToIframe(STEP);
+    };
+
+    const addAppearedBirdStep2 = (_position, _name) => {
+      gPosition = _position;
+      STEP = 2;
+
+      let html = `<div class="d-flex justify-content-center align-items-center flex-column">
+                      <div style="padding: 15px; width: 120px; height: 120px" class="bg-white rounded-circle">
+                        <img
+                          src="${gUrl}"
+                          style="width: 80px; height: 80px"
+                        />
+                      </div>
+                      <div class="text-dard font-weight-bolder" style="font-size:80px;">${_name}</div>
+                    </div>
+                  `;
+
+      $("#step-2-image").html(html);
+      $(".step-0").addClass("d-none");
+      $(".step-1").addClass("d-none");
+      $(".step-2").removeClass("d-none");
+    };
+
+    const finalStep = () => {
+      fetch(serverURL + "/api/appeared_bird", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ gName, gUrl, gSpeciesCode, gPosition }),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          const now = new Date();
+          const options = {
+            timeZone: "America/New_York",
+            year: "numeric",
+            month: "2-digit",
+            day: "2-digit",
+            hour: "2-digit",
+            minute: "2-digit",
+            second: "2-digit",
+            hour12: false,
+          };
+          const newYorkTime = now.toLocaleString("en-US", options);
+          // Extract and reformat the desired format (YYYY-MM-DD HH:mm:ss)
+          const [datePart, timePart] = newYorkTime.split(", ");
+          const [month, day, year] = datePart.split("/");
+          const [hour, minute, second] = timePart.split(":");
+          const formattedNewYorkTime = `${year}-${month}-${day} ${hour}:${minute}`;
+          // $(".toast").toast("show");
+          if (data.code == 200) {
+            // alert(data.message);
+            getAppearedBirdsAgain();
+            STEP = 0;
+            $(".step-0").addClass("d-none");
+            $(".step-1").addClass("d-none");
+            $(".step-2").addClass("d-none");
+            $(".step-3 #sighting-number").text(data.total);
+            $(".step-3").removeClass("d-none");
+            setTimeout(function () {
+              $(".step-0").removeClass("d-none");
+              $(".step-3").addClass("d-none");
+              const iframe = document.getElementById("globeIframe");
+              function sendMessageToIframe(message) {
+                if (iframe && iframe.contentWindow) {
+                  iframe.contentWindow.postMessage(message, "*");
+                }
+              }
+              sendMessageToIframe(STEP);
+            }, 10000);
+          } else {
+            alert(data.error);
+          }
+        })
+        .catch((error) => console.error("Error:", error));
+    };
+
+    const setfinished = () => {
+      $(".step-0").removeClass("d-none");
+      $(".step-3").addClass("d-none");
+      const iframe = document.getElementById("globeIframe");
+      function sendMessageToIframe(message) {
+        if (iframe && iframe.contentWindow) {
+          iframe.contentWindow.postMessage(message, "*");
+        }
+      }
+      sendMessageToIframe(STEP);
+    };
+    const getAppearedBirds = () => {
+      fetch(serverURL + "/api/appeared_bird")
+        .then((response) => response.json())
+        .then(async (res) => {
+          const pageCount = 50;
+          const rowCount = 5;
+          const lat = document.getElementById("latitude").value;
+          const lng = document.getElementById("longitude").value;
+          const dist = document.getElementById("distance").value;
+          const maxResults = 50;
+          const recentSightings = await getRecentSightings(
+            lat,
+            lng,
+            dist,
+            maxResults
+          );
+          let temp = [];
+          recentSightings.map((item) =>
+            temp.push({
+              name: item.comName,
+              url: item.photoSrc,
+              createTime: item.obsDt,
+              loc: item.locName,
+              howMany: item.howMany,
+              userDisplayName: item.userDisplayName
+            })
+          );
+          const data = res.appearedBirds.slice(0, 50);
+          let combineArray = temp.concat(data);
+          let html = "";
+          for (let i = 0; i < combineArray.length; i++) {
+            if (i % 10 == 0) {
+              html += combineArray[i]?.loc
+                ? "<div style='background-color: rgba(117, 159, 191); height: 100%; padding-top:10px; padding-left:50px; padding-right:50px;'>"
+                : "<div style='background-color: rgb(255, 188, 16, 1); height: 100%; padding-top:10px; padding-left:50px; padding-right:50px;'>";
+              html += combineArray[i]?.loc
+                ? '<div class="text-primary py-4 text-center" style="font-size: 150px; color:#2d2620 !important; text-align: left !important; letter-spacing: .02em; margin-bottom:5px;">Local Bird Observations</div>'
+                : '<div class="text-primary py-4 text-center" style="font-size: 150px; color:#2d2620 !important; text-align: left !important; letter-spacing: .02em; margin-bottom:5px;">Your Bird Observations</div>';
+              html +=
+                "<div class=' border-bottom border-dark p-1 d-flex  align-items-center justify-content-between'>";
+              html += "<div style='flex:1.5; font-size: 64px;'>Species</div>";
+              // html += "<div style='flex:0.3'>Post</div>";
+              html += combineArray[i].observ
+                ? "<div style='flex:.65; font-size: 64px;'>Observation #</div>"
+                : "";
+              html +=
+                "<div style='flex:.65; font-size: 64px;'>Date Posted</div>";
+              html += "</div>";
+              for (let j = 0; j < 10; j++) {
+                if (i + j < combineArray.length) {
+                  const item = combineArray[i + j];
+
+                  html +=
+                    '<div class=" border-bottom border-dark p-1 d-flex  align-items-center justify-content-between" style= "gap: 5px">';
+                  html +=
+                    "<div class='d-flex  align-items-center' style='margin-top: 22px; margin-bottom: 36px; gap: 5px; flex:1.5; font-size: 58px;'>";
+                  html +=
+                    '<div style="padding: 7px; width: 105px; height: 105px; margin-right: 20px;" class="bg-white rounded-circle" ><img src="' +
+                    item.url +
+                    '" style="width: 100%; height: 100%; object-fit: contain; padding:10px;" class=" " /></div>';
+                  html +=
+                    "<div style='flex:1.5; font-size: 64px;'>" +
+                    item.name +
+                    "</div>";
+                  html += "</div>";
+                  // item?.howMany
+                  //   ? (html +=
+                  //       "<div style='flex:0.3'>" + item?.howMany + "</div>")
+                  //   : (html += "<div style='flex:0.3'>1</div>");
+                  html += item.observ
+                    ? "<div style='flex:.65; font-size: 64px;' >" +
+                    item.observ +
+                    "</div>"
+                    : "";
+                  html +=
+                    "<div style='flex:.65; font-size: 64px;'>" +
+                    getTimeDifference(item.createTime) +
+                    "</div>";
+                  html += "</div>";
+                }
+              }
+
+              html += "</div>";
+            }
+          }
+          $("#recent-sightings").html(html);
+          if ($("#recent-sightings").length > 0) {
+            setTimeout(function () {
+              $("#recent-sightings")
+                .owlCarousel("destroy")
+                .owlCarousel({
+                  animateIn: "fadeIn",
+                  animateOut: "fadeOut",
+                  smartSpeed: 1450,
+                  center: true,
+                  items: 1,
+                  loop: true,
+                  stagePadding: 0,
+                  margin: 20,
+                  smartSpeed: 1500,
+                  autoplay: true,
+                  nav: true,
+                  dots: true,
+                  pauseOnHover: false,
+                  touchDrag: false,
+                  mouseDrag: false,
+                  navText: [
+                    '<i class="fa fa-angle-left" aria-hidden="true"></i>',
+                    '<i class="fa fa-angle-right" aria-hidden="true"></i>',
+                  ],
+                  navContainer: ".main-content .custom-nav",
+                  responsive: {
+                    600: {
+                      margin: 20,
+                      nav: true,
+                      items: 1,
+                    },
+                    1000: {
+                      margin: 20,
+                      stagePadding: 0,
+                      nav: true,
+                      items: 1,
+                    },
+                  },
+                });
+            }, 100);
+          }
+        })
+        .catch((error) => console.error("Error:", error));
+    };
+
+    const getAppearedBirdsAgain = () => {
+      fetch(serverURL + "/api/appeared_bird")
+        .then((response) => response.json())
+        .then(async (res) => {
+          const pageCount = 50;
+          const rowCount = 5;
+          const lat = document.getElementById("latitude").value;
+          const lng = document.getElementById("longitude").value;
+          const dist = document.getElementById("distance").value;
+          const maxResults = 50;
+          const recentSightings = await getRecentSightings(
+            lat,
+            lng,
+            dist,
+            maxResults
+          );
+          let temp = [];
+          recentSightings.map((item) =>
+            temp.push({
+              name: item.comName,
+              url: item.photoSrc,
+              createTime: item.obsDt,
+              loc: item.locName,
+              howMany: item.howMany,
+            })
+          );
+
+          const data = res.appearedBirds.slice(0, 50);
+          let combineArray = temp.concat(data);
+          let html = "";
+          for (let i = 0; i < combineArray.length; i++) {
+            if (i % 10 == 0) {
+              html += combineArray[i]?.loc
+                ? "<div style='background-color: rgba(255, 188, 16, 1); height: 100%; padding-top:10px; padding-left:50px; padding-right:50px;'>"
+                : "<div style='background-color: rgb(117, 159, 191); height: 100%; padding-top:10px; padding-left:50px; padding-right:50px;'>";
+              html += combineArray[i]?.loc
+                ? '<div class="text-primary py-4 text-center" style="font-size: 150px; color:#2d2620 !important; text-align: left !important; letter-spacing: .02em; margin-bottom:5px;">Your Bird Observations</div>'
+                : '<div class="text-primary py-4 text-center" style="font-size: 150px; color:#2d2620 !important; text-align: left !important; letter-spacing: .02em; margin-bottom:5px;">Local Bird Observations</div>';
+              html +=
+                "<div class=' border-bottom border-dark p-1 d-flex  align-items-center justify-content-between'>";
+              html += "<div style='flex:1.5; font-size: 64px;'>Species</div>";
+              // html += "<div style='flex:0.3'>Post</div>";
+              html += combineArray[i].observ
+                ? "<div style='flex:.65; font-size: 64px;'>Observation #</div>"
+                : "";
+              html +=
+                "<div style='flex:.65; font-size: 64px;'>Date Posted</div>";
+              html += "</div>";
+              for (let j = 0; j < 10; j++) {
+                if (i + j < combineArray.length) {
+                  const item = combineArray[i + j];
+
+                  html +=
+                    '<div class=" border-bottom border-dark p-1 d-flex  align-items-center justify-content-between" style= "gap: 5px">';
+                  html +=
+                    "<div class='d-flex  align-items-center' style='margin-top: 22px; margin-bottom: 22px; gap: 5px; flex:1.5; font-size: 58px;'>";
+                  html +=
+                    '<div style="padding: 7px; width: 120px; height: 120px; margin-right: 20px;" class="bg-white rounded-circle" ><img src="' +
+                    item.url +
+                    '" style="width: 100%; height: 100%; object-fit: contain; padding:10px;" class=" " /></div>';
+                  html +=
+                    "<div style='flex:1.5; font-size: 64px;'>" +
+                    item.name +
+                    "</div>";
+                  html += "</div>";
+                  // item?.howMany
+                  //   ? (html +=
+                  //       "<div style='flex:0.3'>" + item?.howMany + "</div>")
+                  //   : (html += "<div style='flex:0.3'>1</div>");
+                  html += item.observ
+                    ? "<div style='flex:.65; font-size: 64px;' >" +
+                    item.observ +
+                    "</div>"
+                    : "";
+                  html +=
+                    "<div style='flex:.65; font-size: 64px;'>" +
+                    getTimeDifference(item.createTime) +
+                    "</div>";
+                  html += "</div>";
+                }
+              }
+
+              html += "</div>";
+            }
+          }
+          $("#recent-sightings").html(html);
+          if ($("#recent-sightings").length > 0) {
+            // setTimeout(function () {
+            $("#recent-sightings")
+              .owlCarousel("destroy")
+              .owlCarousel({
+                animateIn: "fadeIn",
+                animateOut: "fadeOut",
+                smartSpeed: 1450,
+                center: true,
+                items: 1,
+                loop: true,
+                stagePadding: 0,
+                margin: 20,
+                smartSpeed: 1500,
+                autoplay: true,
+                nav: true,
+                dots: true,
+                pauseOnHover: false,
+                touchDrag: false,
+                mouseDrag: false,
+                navText: [
+                  '<i class="fa fa-angle-left" aria-hidden="true"></i>',
+                  '<i class="fa fa-angle-right" aria-hidden="true"></i>',
+                ],
+                navContainer: ".main-content .custom-nav",
+                responsive: {
+                  600: {
+                    margin: 20,
+                    nav: true,
+                    items: 1,
+                  },
+                  1000: {
+                    margin: 20,
+                    stagePadding: 0,
+                    nav: true,
+                    items: 1,
+                  },
+                },
+              });
+            // }, 100);
+          }
+        })
+        .catch((error) => console.error("Error:", error));
+    };
+    getAppearedBirds();
+  </script>
+  <script>
+    function getTimeDifference(specialDate) {
+      const now = new Date();
+      const options = {
+        timeZone: "America/New_York",
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+        hour12: false,
+      };
+      const timeZone = new Date().getTimezoneOffset() / 60;
+      const targetDate = new Date(new Date(specialDate).getTime() + (4 - timeZone) * 60 * 60000);
+
+      // const targetDate = specialDate.length > 10 ? new Date(specialDate + "Z") : new Date(specialDate + "00Z");
+      const timeDifference = now.getTime() - targetDate.getTime();
+      const secondsDifference = Math.floor(timeDifference / 1000);
+
+      const secondsInMinute = 60;
+      const secondsInHour = 60 * secondsInMinute;
+      const secondsInDay = 24 * secondsInHour;
+
+      if (secondsDifference < secondsInMinute) {
+        return secondsDifference + " seconds ago";
+      } else if (secondsDifference < secondsInHour) {
+        const minutesDifference = Math.floor(
+          secondsDifference / secondsInMinute
+        );
+        return minutesDifference + " minutes ago";
+      } else if (secondsDifference < secondsInDay) {
+        const hoursDifference = Math.floor(secondsDifference / secondsInHour);
+        return hoursDifference + " hours ago";
+      } else {
+        const daysDifference = Math.floor(secondsDifference / secondsInDay);
+        return daysDifference + " days ago";
+      }
+    }
+  </script>
+
+  <script type="text/javascript" language="javascript">
+    $(function () {
+      $(this).bind("contextmenu", function (e) {
+        e.preventDefault();
+      });
+    });
+  </script>
+</body>
+
+</html>

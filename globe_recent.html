@@ -1,0 +1,2931 @@
+<html>
+
+<head>
+  <link rel="stylesheet" href="./font.otf" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <link rel="stylesheet" href="css/owl.carousel.min.css" />
+  <link rel="stylesheet" href="https://use.typekit.net/gxw1gdu.css" />
+  <style>
+    * {
+      -ms-touch-action: none;
+      touch-action: none;
+      -webkit-tap-highlight-color: transparent;
+      -webkit-touch-callout: none;
+      -webkit-user-select: none;
+      -khtml-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+      outline: none !important;
+    }
+
+    body {
+      font-family: "canada-type-gibson", sans-serif;
+      font-weight: 200;
+      margin: 0;
+      background-color: #2d2620;
+      background-size: cover;
+      background-position: center;
+      color: white;
+      overflow: hidden;
+    }
+
+    body,
+    html {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+    }
+
+    .interface {
+      position: absolute;
+      width: 1920px;
+      height: 1080px;
+      bottom: 0px;
+      left: 1920px;
+      z-index: 900;
+      pointer-events: none;
+      justify-content: space-between;
+      /**  background-color: bisque; **/
+    }
+
+    #globeViz {
+      margin-left: 160px;
+      z-index: 0;
+    }
+
+    #birdInfoContainer {
+      position: absolute;
+      left: 0px;
+      bottom: 0px;
+      width: 1920px;
+      height: 1080px;
+      /**  background-color: aquamarine; **/
+      z-index: 900;
+    }
+
+    .owl-item img {
+      margin-top: 18px;
+    }
+
+    .owl-stage-outer {
+      height: 900px;
+    }
+  </style>
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+    integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/three"></script>
+  <script src="globe.js"></script>
+  <script src="https://livesubs.ornith.cornell.edu/socket.io/socket.io.js"></script>
+</head>
+
+<body>
+  <div class="interface">
+    <div>
+      <div style="
+            color: white;
+            margin-top: 85px;
+            margin-left: 80px;
+            font-size: 88px;
+            margin-bottom: 30px;
+          ">
+        Observation Key
+      </div>
+      <div style="
+            justify-items: center;
+            align-items: center;
+            display: flex;
+            gap: 5px;
+            margin-top: 25px;
+            font-size: 64px;
+          ">
+        <div style="
+              min-width: 13px;
+              width: 40px;
+              height: 40px;
+              margin-left: 80px;
+              margin-right: 25px;
+              background-color: #ffbc10;
+              border-radius: 50%;
+            "></div>
+        <div>0-½ hour ago</div>
+      </div>
+      <div style="
+            justify-items: center;
+            align-items: center;
+            display: flex;
+            gap: 5px;
+            margin-top: 35px;
+            font-size: 64px;
+          ">
+        <div style="
+              min-width: 13px;
+              width: 40px;
+              height: 40px;
+              margin-left: 80px;
+
+              margin-right: 25px;
+              background-color: #df1e12;
+              border-radius: 50%;
+            "></div>
+        <div>½-3 hours ago</div>
+      </div>
+      <div style="
+            justify-items: center;
+            align-items: center;
+            display: flex;
+            gap: 5px;
+            margin-top: 35px;
+            font-size: 64px;
+          ">
+        <div style="
+              min-width: 13px;
+              width: 40px;
+              height: 40px;
+              margin-left: 80px;
+
+              margin-right: 30px;
+              background-color: #69a0c2;
+              border-radius: 50%;
+            "></div>
+        <div>3-6 hours ago</div>
+      </div>
+      <div style="
+            justify-items: center;
+            align-items: center;
+            display: flex;
+            gap: 5px;
+            margin-top: 35px;
+            font-size: 64px;
+          ">
+        <div style="
+              min-width: 13px;
+              width: 40px;
+              height: 40px;
+              margin-left: 80px;
+
+              margin-right: 30px;
+              background-color: #8dca8b;
+              border-radius: 50%;
+            "></div>
+        <div>6-12 hours ago</div>
+      </div>
+      <div class="" style="gap: 30px; align-items: center; margin-top: 124px">
+        <img style="max-width: 400px; margin-left: 70px; margin-top: 50px" src="powered-ebird.png" />
+      </div>
+    </div>
+    <div style="width: 800px; margin-top: -790px; margin-left: 900px">
+      <img src="rotate.png" width="800px" height="auto" alt="" />
+    </div>
+  </div>
+  <div style="
+        position: absolute;
+        left: 60px;
+        top: 60px;
+        font-size: 160px;
+        letter-spacing: 0.02em;
+        font-weight: 200 !important;
+      ">
+    Global Bird Observations
+  </div>
+  <div style="
+        position: absolute;
+        right: 80px;
+        top: 50px;
+        font-size: 80px;
+        text-align: right;
+      ">
+    eBird Checklists Today <br />
+    <div class="checklist-count" style="font-size: 160px"></div>
+  </div>
+  <div style="
+        position: absolute;
+        left: 0px;
+        bottom: 0px;
+        width: calc((100% - 80px) / 2);
+        z-index: 1111;
+      " class="step-0">
+    <div class="owl-carousel owl-4" id="birdInfoContainer"></div>
+  </div>
+  <!-- <div
+      style="
+        position: absolute;
+        left: 0px;
+        bottom: 40px;
+        width: calc((100% - 80px) / 2);
+        z-index: 1111;
+      "
+    >
+      <div
+        class=""
+        style="display: flex; overflow: hidden; justify-content: center"
+      >
+        <div class="" style="padding: 20px; width: 65%">
+          <div>
+            Citizen science projects like eBird and tools like Merlin allow
+            anyone to be a part ofthe world-wide community of people enjoying
+            birds and nature right now.
+          </div>
+          <div
+            style="
+              display: flex;
+              margin-top: 40px;
+              gap: 20px;
+              align-items: center;
+            "
+          >
+            <img width="80px" src="./qr.png" />
+            Download Merlin and eBird
+          </div>
+        </div>
+      </div>
+    </div> -->
+  <div id="globeViz"></div>
+  <script>
+    function getTimeDifference(specialDate) {
+      const now = new Date();
+      const options = {
+        timeZone: "America/New_York",
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+        hour12: false,
+      };
+      // const newYorkTime = now.toLocaleString("en-US", options);
+
+      const targetDate = new Date(specialDate);
+      const timeZone = new Date().getTimezoneOffset();
+      const timeDifference = now.getTime() - (targetDate.getTime() - timeZone * 60000);
+      const secondsDifference = Math.floor(timeDifference / 1000);
+
+      const secondsInMinute = 60;
+      const secondsInHour = 60 * secondsInMinute;
+      const secondsInDay = 24 * secondsInHour;
+
+      if (secondsDifference < secondsInMinute) {
+        return secondsDifference + " seconds ago";
+      } else if (secondsDifference < secondsInHour) {
+        const minutesDifference = Math.floor(
+          secondsDifference / secondsInMinute
+        );
+        return minutesDifference + " minutes ago";
+      } else if (secondsDifference < secondsInDay) {
+        const hoursDifference = Math.floor(secondsDifference / secondsInHour);
+        return hoursDifference + " hours ago";
+      } else {
+        const daysDifference = Math.floor(secondsDifference / secondsInDay);
+        return daysDifference + " days ago";
+      }
+    }
+    const feature = {
+      type: "Feature",
+      properties: {
+        scalerank: 0,
+        natscale: 400,
+        labelrank: 2,
+        featurecla: "",
+        name: "",
+        namepar: "",
+        namealt: null,
+        diffascii: 0,
+        nameascii: "",
+        adm0cap: 1,
+        capalt: null,
+        capin: null,
+        worldcity: 1,
+        megacity: 1,
+        sov0name: "",
+        sov_a3: "",
+        adm0name: "",
+        adm0_a3: "",
+        adm1name: "",
+        iso_a2: "",
+        note: null,
+        latitude: 0,
+        longitude: 0,
+        changed: 0,
+        namediff: 0,
+        diffnote: null,
+        pop_max: 10452000,
+        pop_min: 10452000,
+        pop_other: 10585385,
+        rank_max: 14,
+        rank_min: 14,
+        geonameid: 524901,
+        meganame: "",
+        ls_name: "",
+        ls_match: 1,
+        checkme: 0,
+        min_zoom: 1.7,
+      },
+      bbox: [37.613577, 55.75411, 37.613577, 55.75411],
+      geometry: { type: "Point", coordinates: [37.613577, 55.75411] },
+    };
+    const data = {
+      type: "FeatureCollection",
+      features: [],
+      bbox: [
+        -175.220564477617, -41.2999878536917, 179.216647094029,
+        64.1500236197392,
+      ],
+    };
+
+    const world = Globe({ animateIn: false })(
+      document.getElementById("globeViz")
+    )
+
+      .labelsData(data.features)
+      .labelLat((d) => d.properties.latitude)
+      .labelLng((d) => d.properties.longitude)
+      .labelText((d) => d.properties.name)
+      .labelSize((d) => Math.sqrt(d.properties.pop_max) * 6e-4)
+      .labelDotRadius((d) =>
+        d.new
+          ? Math.sqrt(d.properties.pop_max) * 1e-4
+          : Math.sqrt(d.properties.pop_max) * 1e-4
+      )
+      .labelColor((d) =>
+        d.new
+          ? "rgb(205, 54, 38)"
+          : d.hours >= 3
+            ? "rgb(117, 159, 191)"
+            : d.hours >= 2
+              ? "rgb(154, 200, 145)"
+              : "rgb(245, 191, 68)"
+      )
+      .labelResolution(0)
+      .labelAltitude((d) =>
+        d.new ? ".06" : d.hours >= 3 ? ".01" : d.hours >= 2 ? ".02" : ".04"
+      )
+      .width("3200")
+      .height("3200")
+      .globeImageUrl("https://unpkg.com/three-globe/example/img/earth-blue-marble.jpg")
+      .bumpImageUrl(
+        "https://unpkg.com/three-globe/example/img/earth-topology.png"
+      );
+
+    // Auto-rotate
+    world.controls().autoRotate = true;
+    world.controls().autoRotateSpeed = 0.5;
+    world.controls().enableZoom = false;
+
+    const url = "https://merlinglobe-1ab0512223a0.herokuapp.com/";
+    // const url = "http://localhost:8000";
+    const countUrl = "https://ebird.org/livesubs";
+    const countSocketUrl = "https://livesubs.ornith.cornell.edu";
+    const countSocket = io.connect(countSocketUrl, {
+      transports: ["websocket"],
+    });
+    countSocket.on("connect", () => {
+      console.log("connected to the count socket server");
+    })
+    countSocket.on("newsubs", (e) => {
+      const result = JSON.parse(e);
+      const todayCount = result[result.length - 1].subNum;
+      document.getElementsByClassName("checklist-count")[0].innerHTML = todayCount.toString()?.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    })
+    const socket = io.connect(url, {
+      transports: ["websocket"],
+    });
+    socket.on("connect_error", (e) => {
+      console.log(e);
+    });
+    socket.on("connect", () => {
+      console.log("connected to the socket server");
+    });
+
+    socket.on("new-data", async function (e) {
+      const { newData, oldData, oneDayData } = e;
+      console.log("newData", newData, oldData);
+      let features = newData.map((mapdata) => ({
+        ...feature,
+        properties: {
+          ...feature.properties,
+          latitude: mapdata.lat,
+          longitude: mapdata.lng,
+        },
+        new: true,
+        hours: mapdata.hours,
+      }));
+      if (oldData.length > 0) {
+        features = [
+          ...features,
+          ...oldData.map((mapdata) => ({
+            ...feature,
+            properties: {
+              ...feature.properties,
+              latitude: mapdata.lat,
+              longitude: mapdata.lng,
+            },
+            hours: mapdata.hours,
+          })),
+        ];
+      }
+      // document.getElementsByClassName("checklist-count")[0].innerHTML =
+      //   (oneDayData?.count)
+      //     .toString()
+      //     ?.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      world.labelsData(features);
+      const recentSightings = await getRecentSightings(newData[0].lat, newData[1].lng, 40, 1);
+      console.log("recentSightings", recentSightings);
+    });
+    socket.on("historic-data", function (e) {
+
+      const features = e.map((mapdata) => ({
+        ...feature,
+        properties: {
+          ...feature.properties,
+          latitude: mapdata.lat,
+          longitude: mapdata.lng,
+        },
+        hours: mapdata.hours,
+      }));
+      world.labelsData(features);
+    });
+  </script>
+  <script>
+    // Listen for messages from the parent window
+    window.addEventListener("message", function (event) {
+      // if (event.origin !== window.location.origin) {
+      //   return;
+      // }
+      // Check the message content
+      if (event.data == 0) {
+        // document.getElementsByClassName("step-1")[0].style.display = "none";
+        document.getElementsByClassName("step-0")[0].style.display = "block";
+      }
+      if (event.data == 1) {
+        // document.getElementsByClassName("step-0")[0].style.display = "none";
+        document.getElementsByClassName("step-1")[0].style.display = "block";
+      }
+    });
+  </script>
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <script src="js/owl.carousel.min.js"></script>
+  <script>
+    // variables
+    const originalCountryData = [
+      {
+        name: "Ascension Island",
+        code: "AC",
+        emoji: "🇦🇨",
+        unicode: "U+1F1E6 U+1F1E8",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/AC.svg",
+      },
+      {
+        name: "Andorra",
+        code: "AD",
+        emoji: "🇦🇩",
+        unicode: "U+1F1E6 U+1F1E9",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/AD.svg",
+      },
+      {
+        name: "United Arab Emirates",
+        code: "AE",
+        emoji: "🇦🇪",
+        unicode: "U+1F1E6 U+1F1EA",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/AE.svg",
+      },
+      {
+        name: "Afghanistan",
+        code: "AF",
+        emoji: "🇦🇫",
+        unicode: "U+1F1E6 U+1F1EB",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/AF.svg",
+      },
+      {
+        name: "Antigua & Barbuda",
+        code: "AG",
+        emoji: "🇦🇬",
+        unicode: "U+1F1E6 U+1F1EC",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/AG.svg",
+      },
+      {
+        name: "Anguilla",
+        code: "AI",
+        emoji: "🇦🇮",
+        unicode: "U+1F1E6 U+1F1EE",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/AI.svg",
+      },
+      {
+        name: "Albania",
+        code: "AL",
+        emoji: "🇦🇱",
+        unicode: "U+1F1E6 U+1F1F1",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/AL.svg",
+      },
+      {
+        name: "Armenia",
+        code: "AM",
+        emoji: "🇦🇲",
+        unicode: "U+1F1E6 U+1F1F2",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/AM.svg",
+      },
+      {
+        name: "Angola",
+        code: "AO",
+        emoji: "🇦🇴",
+        unicode: "U+1F1E6 U+1F1F4",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/AO.svg",
+      },
+      {
+        name: "Antarctica",
+        code: "AQ",
+        emoji: "🇦🇶",
+        unicode: "U+1F1E6 U+1F1F6",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/AQ.svg",
+      },
+      {
+        name: "Argentina",
+        code: "AR",
+        emoji: "🇦🇷",
+        unicode: "U+1F1E6 U+1F1F7",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/AR.svg",
+      },
+      {
+        name: "American Samoa",
+        code: "AS",
+        emoji: "🇦🇸",
+        unicode: "U+1F1E6 U+1F1F8",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/AS.svg",
+      },
+      {
+        name: "Austria",
+        code: "AT",
+        emoji: "🇦🇹",
+        unicode: "U+1F1E6 U+1F1F9",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/AT.svg",
+      },
+      {
+        name: "Australia",
+        code: "AU",
+        emoji: "🇦🇺",
+        unicode: "U+1F1E6 U+1F1FA",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/AU.svg",
+      },
+      {
+        name: "Aruba",
+        code: "AW",
+        emoji: "🇦🇼",
+        unicode: "U+1F1E6 U+1F1FC",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/AW.svg",
+      },
+      {
+        name: "Åland Islands",
+        code: "AX",
+        emoji: "🇦🇽",
+        unicode: "U+1F1E6 U+1F1FD",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/AX.svg",
+      },
+      {
+        name: "Azerbaijan",
+        code: "AZ",
+        emoji: "🇦🇿",
+        unicode: "U+1F1E6 U+1F1FF",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/AZ.svg",
+      },
+      {
+        name: "Bosnia & Herzegovina",
+        code: "BA",
+        emoji: "🇧🇦",
+        unicode: "U+1F1E7 U+1F1E6",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/BA.svg",
+      },
+      {
+        name: "Barbados",
+        code: "BB",
+        emoji: "🇧🇧",
+        unicode: "U+1F1E7 U+1F1E7",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/BB.svg",
+      },
+      {
+        name: "Bangladesh",
+        code: "BD",
+        emoji: "🇧🇩",
+        unicode: "U+1F1E7 U+1F1E9",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/BD.svg",
+      },
+      {
+        name: "Belgium",
+        code: "BE",
+        emoji: "🇧🇪",
+        unicode: "U+1F1E7 U+1F1EA",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/BE.svg",
+      },
+      {
+        name: "Burkina Faso",
+        code: "BF",
+        emoji: "🇧🇫",
+        unicode: "U+1F1E7 U+1F1EB",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/BF.svg",
+      },
+      {
+        name: "Bulgaria",
+        code: "BG",
+        emoji: "🇧🇬",
+        unicode: "U+1F1E7 U+1F1EC",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/BG.svg",
+      },
+      {
+        name: "Bahrain",
+        code: "BH",
+        emoji: "🇧🇭",
+        unicode: "U+1F1E7 U+1F1ED",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/BH.svg",
+      },
+      {
+        name: "Burundi",
+        code: "BI",
+        emoji: "🇧🇮",
+        unicode: "U+1F1E7 U+1F1EE",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/BI.svg",
+      },
+      {
+        name: "Benin",
+        code: "BJ",
+        emoji: "🇧🇯",
+        unicode: "U+1F1E7 U+1F1EF",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/BJ.svg",
+      },
+      {
+        name: "St. Barthélemy",
+        code: "BL",
+        emoji: "🇧🇱",
+        unicode: "U+1F1E7 U+1F1F1",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/BL.svg",
+      },
+      {
+        name: "Bermuda",
+        code: "BM",
+        emoji: "🇧🇲",
+        unicode: "U+1F1E7 U+1F1F2",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/BM.svg",
+      },
+      {
+        name: "Brunei",
+        code: "BN",
+        emoji: "🇧🇳",
+        unicode: "U+1F1E7 U+1F1F3",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/BN.svg",
+      },
+      {
+        name: "Bolivia",
+        code: "BO",
+        emoji: "🇧🇴",
+        unicode: "U+1F1E7 U+1F1F4",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/BO.svg",
+      },
+      {
+        name: "Caribbean Netherlands",
+        code: "BQ",
+        emoji: "🇧🇶",
+        unicode: "U+1F1E7 U+1F1F6",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/BQ.svg",
+      },
+      {
+        name: "Brazil",
+        code: "BR",
+        emoji: "🇧🇷",
+        unicode: "U+1F1E7 U+1F1F7",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/BR.svg",
+      },
+      {
+        name: "Bahamas",
+        code: "BS",
+        emoji: "🇧🇸",
+        unicode: "U+1F1E7 U+1F1F8",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/BS.svg",
+      },
+      {
+        name: "Bhutan",
+        code: "BT",
+        emoji: "🇧🇹",
+        unicode: "U+1F1E7 U+1F1F9",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/BT.svg",
+      },
+      {
+        name: "Bouvet Island",
+        code: "BV",
+        emoji: "🇧🇻",
+        unicode: "U+1F1E7 U+1F1FB",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/BV.svg",
+      },
+      {
+        name: "Botswana",
+        code: "BW",
+        emoji: "🇧🇼",
+        unicode: "U+1F1E7 U+1F1FC",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/BW.svg",
+      },
+      {
+        name: "Belarus",
+        code: "BY",
+        emoji: "🇧🇾",
+        unicode: "U+1F1E7 U+1F1FE",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/BY.svg",
+      },
+      {
+        name: "Belize",
+        code: "BZ",
+        emoji: "🇧🇿",
+        unicode: "U+1F1E7 U+1F1FF",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/BZ.svg",
+      },
+      {
+        name: "Canada",
+        code: "CA",
+        emoji: "🇨🇦",
+        unicode: "U+1F1E8 U+1F1E6",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/CA.svg",
+      },
+      {
+        name: "Cocos (Keeling) Islands",
+        code: "CC",
+        emoji: "🇨🇨",
+        unicode: "U+1F1E8 U+1F1E8",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/CC.svg",
+      },
+      {
+        name: "Congo - Kinshasa",
+        code: "CD",
+        emoji: "🇨🇩",
+        unicode: "U+1F1E8 U+1F1E9",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/CD.svg",
+      },
+      {
+        name: "Central African Republic",
+        code: "CF",
+        emoji: "🇨🇫",
+        unicode: "U+1F1E8 U+1F1EB",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/CF.svg",
+      },
+      {
+        name: "Congo - Brazzaville",
+        code: "CG",
+        emoji: "🇨🇬",
+        unicode: "U+1F1E8 U+1F1EC",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/CG.svg",
+      },
+      {
+        name: "Switzerland",
+        code: "CH",
+        emoji: "🇨🇭",
+        unicode: "U+1F1E8 U+1F1ED",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/CH.svg",
+      },
+      {
+        name: "Côte d’Ivoire",
+        code: "CI",
+        emoji: "🇨🇮",
+        unicode: "U+1F1E8 U+1F1EE",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/CI.svg",
+      },
+      {
+        name: "Cook Islands",
+        code: "CK",
+        emoji: "🇨🇰",
+        unicode: "U+1F1E8 U+1F1F0",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/CK.svg",
+      },
+      {
+        name: "Chile",
+        code: "CL",
+        emoji: "🇨🇱",
+        unicode: "U+1F1E8 U+1F1F1",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/CL.svg",
+      },
+      {
+        name: "Cameroon",
+        code: "CM",
+        emoji: "🇨🇲",
+        unicode: "U+1F1E8 U+1F1F2",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/CM.svg",
+      },
+      {
+        name: "China",
+        code: "CN",
+        emoji: "🇨🇳",
+        unicode: "U+1F1E8 U+1F1F3",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/CN.svg",
+      },
+      {
+        name: "Colombia",
+        code: "CO",
+        emoji: "🇨🇴",
+        unicode: "U+1F1E8 U+1F1F4",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/CO.svg",
+      },
+      {
+        name: "Clipperton Island",
+        code: "CP",
+        emoji: "🇨🇵",
+        unicode: "U+1F1E8 U+1F1F5",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/CP.svg",
+      },
+      {
+        name: "Costa Rica",
+        code: "CR",
+        emoji: "🇨🇷",
+        unicode: "U+1F1E8 U+1F1F7",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/CR.svg",
+      },
+      {
+        name: "Cuba",
+        code: "CU",
+        emoji: "🇨🇺",
+        unicode: "U+1F1E8 U+1F1FA",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/CU.svg",
+      },
+      {
+        name: "Cape Verde",
+        code: "CV",
+        emoji: "🇨🇻",
+        unicode: "U+1F1E8 U+1F1FB",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/CV.svg",
+      },
+      {
+        name: "Curaçao",
+        code: "CW",
+        emoji: "🇨🇼",
+        unicode: "U+1F1E8 U+1F1FC",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/CW.svg",
+      },
+      {
+        name: "Christmas Island",
+        code: "CX",
+        emoji: "🇨🇽",
+        unicode: "U+1F1E8 U+1F1FD",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/CX.svg",
+      },
+      {
+        name: "Cyprus",
+        code: "CY",
+        emoji: "🇨🇾",
+        unicode: "U+1F1E8 U+1F1FE",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/CY.svg",
+      },
+      {
+        name: "Czechia",
+        code: "CZ",
+        emoji: "🇨🇿",
+        unicode: "U+1F1E8 U+1F1FF",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/CZ.svg",
+      },
+      {
+        name: "Germany",
+        code: "DE",
+        emoji: "🇩🇪",
+        unicode: "U+1F1E9 U+1F1EA",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/DE.svg",
+      },
+      {
+        name: "Diego Garcia",
+        code: "DG",
+        emoji: "🇩🇬",
+        unicode: "U+1F1E9 U+1F1EC",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/DG.svg",
+      },
+      {
+        name: "Djibouti",
+        code: "DJ",
+        emoji: "🇩🇯",
+        unicode: "U+1F1E9 U+1F1EF",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/DJ.svg",
+      },
+      {
+        name: "Denmark",
+        code: "DK",
+        emoji: "🇩🇰",
+        unicode: "U+1F1E9 U+1F1F0",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/DK.svg",
+      },
+      {
+        name: "Dominica",
+        code: "DM",
+        emoji: "🇩🇲",
+        unicode: "U+1F1E9 U+1F1F2",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/DM.svg",
+      },
+      {
+        name: "Dominican Republic",
+        code: "DO",
+        emoji: "🇩🇴",
+        unicode: "U+1F1E9 U+1F1F4",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/DO.svg",
+      },
+      {
+        name: "Algeria",
+        code: "DZ",
+        emoji: "🇩🇿",
+        unicode: "U+1F1E9 U+1F1FF",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/DZ.svg",
+      },
+      {
+        name: "Ceuta & Melilla",
+        code: "EA",
+        emoji: "🇪🇦",
+        unicode: "U+1F1EA U+1F1E6",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/EA.svg",
+      },
+      {
+        name: "Ecuador",
+        code: "EC",
+        emoji: "🇪🇨",
+        unicode: "U+1F1EA U+1F1E8",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/EC.svg",
+      },
+      {
+        name: "Estonia",
+        code: "EE",
+        emoji: "🇪🇪",
+        unicode: "U+1F1EA U+1F1EA",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/EE.svg",
+      },
+      {
+        name: "Egypt",
+        code: "EG",
+        emoji: "🇪🇬",
+        unicode: "U+1F1EA U+1F1EC",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/EG.svg",
+      },
+      {
+        name: "Western Sahara",
+        code: "EH",
+        emoji: "🇪🇭",
+        unicode: "U+1F1EA U+1F1ED",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/EH.svg",
+      },
+      {
+        name: "Eritrea",
+        code: "ER",
+        emoji: "🇪🇷",
+        unicode: "U+1F1EA U+1F1F7",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/ER.svg",
+      },
+      {
+        name: "Spain",
+        code: "ES",
+        emoji: "🇪🇸",
+        unicode: "U+1F1EA U+1F1F8",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/ES.svg",
+      },
+      {
+        name: "Ethiopia",
+        code: "ET",
+        emoji: "🇪🇹",
+        unicode: "U+1F1EA U+1F1F9",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/ET.svg",
+      },
+      {
+        name: "European Union",
+        code: "EU",
+        emoji: "🇪🇺",
+        unicode: "U+1F1EA U+1F1FA",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/EU.svg",
+      },
+      {
+        name: "Finland",
+        code: "FI",
+        emoji: "🇫🇮",
+        unicode: "U+1F1EB U+1F1EE",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/FI.svg",
+      },
+      {
+        name: "Fiji",
+        code: "FJ",
+        emoji: "🇫🇯",
+        unicode: "U+1F1EB U+1F1EF",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/FJ.svg",
+      },
+      {
+        name: "Falkland Islands",
+        code: "FK",
+        emoji: "🇫🇰",
+        unicode: "U+1F1EB U+1F1F0",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/FK.svg",
+      },
+      {
+        name: "Micronesia",
+        code: "FM",
+        emoji: "🇫🇲",
+        unicode: "U+1F1EB U+1F1F2",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/FM.svg",
+      },
+      {
+        name: "Faroe Islands",
+        code: "FO",
+        emoji: "🇫🇴",
+        unicode: "U+1F1EB U+1F1F4",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/FO.svg",
+      },
+      {
+        name: "France",
+        code: "FR",
+        emoji: "🇫🇷",
+        unicode: "U+1F1EB U+1F1F7",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/FR.svg",
+      },
+      {
+        name: "Gabon",
+        code: "GA",
+        emoji: "🇬🇦",
+        unicode: "U+1F1EC U+1F1E6",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/GA.svg",
+      },
+      {
+        name: "United Kingdom",
+        code: "GB",
+        emoji: "🇬🇧",
+        unicode: "U+1F1EC U+1F1E7",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/GB.svg",
+      },
+      {
+        name: "Grenada",
+        code: "GD",
+        emoji: "🇬🇩",
+        unicode: "U+1F1EC U+1F1E9",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/GD.svg",
+      },
+      {
+        name: "Georgia",
+        code: "GE",
+        emoji: "🇬🇪",
+        unicode: "U+1F1EC U+1F1EA",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/GE.svg",
+      },
+      {
+        name: "French Guiana",
+        code: "GF",
+        emoji: "🇬🇫",
+        unicode: "U+1F1EC U+1F1EB",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/GF.svg",
+      },
+      {
+        name: "Guernsey",
+        code: "GG",
+        emoji: "🇬🇬",
+        unicode: "U+1F1EC U+1F1EC",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/GG.svg",
+      },
+      {
+        name: "Ghana",
+        code: "GH",
+        emoji: "🇬🇭",
+        unicode: "U+1F1EC U+1F1ED",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/GH.svg",
+      },
+      {
+        name: "Gibraltar",
+        code: "GI",
+        emoji: "🇬🇮",
+        unicode: "U+1F1EC U+1F1EE",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/GI.svg",
+      },
+      {
+        name: "Greenland",
+        code: "GL",
+        emoji: "🇬🇱",
+        unicode: "U+1F1EC U+1F1F1",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/GL.svg",
+      },
+      {
+        name: "Gambia",
+        code: "GM",
+        emoji: "🇬🇲",
+        unicode: "U+1F1EC U+1F1F2",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/GM.svg",
+      },
+      {
+        name: "Guinea",
+        code: "GN",
+        emoji: "🇬🇳",
+        unicode: "U+1F1EC U+1F1F3",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/GN.svg",
+      },
+      {
+        name: "Guadeloupe",
+        code: "GP",
+        emoji: "🇬🇵",
+        unicode: "U+1F1EC U+1F1F5",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/GP.svg",
+      },
+      {
+        name: "Equatorial Guinea",
+        code: "GQ",
+        emoji: "🇬🇶",
+        unicode: "U+1F1EC U+1F1F6",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/GQ.svg",
+      },
+      {
+        name: "Greece",
+        code: "GR",
+        emoji: "🇬🇷",
+        unicode: "U+1F1EC U+1F1F7",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/GR.svg",
+      },
+      {
+        name: "South Georgia & South Sandwich Islands",
+        code: "GS",
+        emoji: "🇬🇸",
+        unicode: "U+1F1EC U+1F1F8",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/GS.svg",
+      },
+      {
+        name: "Guatemala",
+        code: "GT",
+        emoji: "🇬🇹",
+        unicode: "U+1F1EC U+1F1F9",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/GT.svg",
+      },
+      {
+        name: "Guam",
+        code: "GU",
+        emoji: "🇬🇺",
+        unicode: "U+1F1EC U+1F1FA",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/GU.svg",
+      },
+      {
+        name: "Guinea-Bissau",
+        code: "GW",
+        emoji: "🇬🇼",
+        unicode: "U+1F1EC U+1F1FC",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/GW.svg",
+      },
+      {
+        name: "Guyana",
+        code: "GY",
+        emoji: "🇬🇾",
+        unicode: "U+1F1EC U+1F1FE",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/GY.svg",
+      },
+      {
+        name: "Hong Kong SAR China",
+        code: "HK",
+        emoji: "🇭🇰",
+        unicode: "U+1F1ED U+1F1F0",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/HK.svg",
+      },
+      {
+        name: "Heard & McDonald Islands",
+        code: "HM",
+        emoji: "🇭🇲",
+        unicode: "U+1F1ED U+1F1F2",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/HM.svg",
+      },
+      {
+        name: "Honduras",
+        code: "HN",
+        emoji: "🇭🇳",
+        unicode: "U+1F1ED U+1F1F3",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/HN.svg",
+      },
+      {
+        name: "Croatia",
+        code: "HR",
+        emoji: "🇭🇷",
+        unicode: "U+1F1ED U+1F1F7",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/HR.svg",
+      },
+      {
+        name: "Haiti",
+        code: "HT",
+        emoji: "🇭🇹",
+        unicode: "U+1F1ED U+1F1F9",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/HT.svg",
+      },
+      {
+        name: "Hungary",
+        code: "HU",
+        emoji: "🇭🇺",
+        unicode: "U+1F1ED U+1F1FA",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/HU.svg",
+      },
+      {
+        name: "Canary Islands",
+        code: "IC",
+        emoji: "🇮🇨",
+        unicode: "U+1F1EE U+1F1E8",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/IC.svg",
+      },
+      {
+        name: "Indonesia",
+        code: "ID",
+        emoji: "🇮🇩",
+        unicode: "U+1F1EE U+1F1E9",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/ID.svg",
+      },
+      {
+        name: "Ireland",
+        code: "IE",
+        emoji: "🇮🇪",
+        unicode: "U+1F1EE U+1F1EA",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/IE.svg",
+      },
+      {
+        name: "Israel",
+        code: "IL",
+        emoji: "🇮🇱",
+        unicode: "U+1F1EE U+1F1F1",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/IL.svg",
+      },
+      {
+        name: "Isle of Man",
+        code: "IM",
+        emoji: "🇮🇲",
+        unicode: "U+1F1EE U+1F1F2",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/IM.svg",
+      },
+      {
+        name: "India",
+        code: "IN",
+        emoji: "🇮🇳",
+        unicode: "U+1F1EE U+1F1F3",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/IN.svg",
+      },
+      {
+        name: "British Indian Ocean Territory",
+        code: "IO",
+        emoji: "🇮🇴",
+        unicode: "U+1F1EE U+1F1F4",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/IO.svg",
+      },
+      {
+        name: "Iraq",
+        code: "IQ",
+        emoji: "🇮🇶",
+        unicode: "U+1F1EE U+1F1F6",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/IQ.svg",
+      },
+      {
+        name: "Iran",
+        code: "IR",
+        emoji: "🇮🇷",
+        unicode: "U+1F1EE U+1F1F7",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/IR.svg",
+      },
+      {
+        name: "Iceland",
+        code: "IS",
+        emoji: "🇮🇸",
+        unicode: "U+1F1EE U+1F1F8",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/IS.svg",
+      },
+      {
+        name: "Italy",
+        code: "IT",
+        emoji: "🇮🇹",
+        unicode: "U+1F1EE U+1F1F9",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/IT.svg",
+      },
+      {
+        name: "Jersey",
+        code: "JE",
+        emoji: "🇯🇪",
+        unicode: "U+1F1EF U+1F1EA",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/JE.svg",
+      },
+      {
+        name: "Jamaica",
+        code: "JM",
+        emoji: "🇯🇲",
+        unicode: "U+1F1EF U+1F1F2",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/JM.svg",
+      },
+      {
+        name: "Jordan",
+        code: "JO",
+        emoji: "🇯🇴",
+        unicode: "U+1F1EF U+1F1F4",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/JO.svg",
+      },
+      {
+        name: "Japan",
+        code: "JP",
+        emoji: "🇯🇵",
+        unicode: "U+1F1EF U+1F1F5",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/JP.svg",
+      },
+      {
+        name: "Kenya",
+        code: "KE",
+        emoji: "🇰🇪",
+        unicode: "U+1F1F0 U+1F1EA",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/KE.svg",
+      },
+      {
+        name: "Kyrgyzstan",
+        code: "KG",
+        emoji: "🇰🇬",
+        unicode: "U+1F1F0 U+1F1EC",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/KG.svg",
+      },
+      {
+        name: "Cambodia",
+        code: "KH",
+        emoji: "🇰🇭",
+        unicode: "U+1F1F0 U+1F1ED",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/KH.svg",
+      },
+      {
+        name: "Kiribati",
+        code: "KI",
+        emoji: "🇰🇮",
+        unicode: "U+1F1F0 U+1F1EE",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/KI.svg",
+      },
+      {
+        name: "Comoros",
+        code: "KM",
+        emoji: "🇰🇲",
+        unicode: "U+1F1F0 U+1F1F2",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/KM.svg",
+      },
+      {
+        name: "St. Kitts & Nevis",
+        code: "KN",
+        emoji: "🇰🇳",
+        unicode: "U+1F1F0 U+1F1F3",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/KN.svg",
+      },
+      {
+        name: "North Korea",
+        code: "KP",
+        emoji: "🇰🇵",
+        unicode: "U+1F1F0 U+1F1F5",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/KP.svg",
+      },
+      {
+        name: "South Korea",
+        code: "KR",
+        emoji: "🇰🇷",
+        unicode: "U+1F1F0 U+1F1F7",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/KR.svg",
+      },
+      {
+        name: "Kuwait",
+        code: "KW",
+        emoji: "🇰🇼",
+        unicode: "U+1F1F0 U+1F1FC",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/KW.svg",
+      },
+      {
+        name: "Cayman Islands",
+        code: "KY",
+        emoji: "🇰🇾",
+        unicode: "U+1F1F0 U+1F1FE",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/KY.svg",
+      },
+      {
+        name: "Kazakhstan",
+        code: "KZ",
+        emoji: "🇰🇿",
+        unicode: "U+1F1F0 U+1F1FF",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/KZ.svg",
+      },
+      {
+        name: "Laos",
+        code: "LA",
+        emoji: "🇱🇦",
+        unicode: "U+1F1F1 U+1F1E6",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/LA.svg",
+      },
+      {
+        name: "Lebanon",
+        code: "LB",
+        emoji: "🇱🇧",
+        unicode: "U+1F1F1 U+1F1E7",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/LB.svg",
+      },
+      {
+        name: "St. Lucia",
+        code: "LC",
+        emoji: "🇱🇨",
+        unicode: "U+1F1F1 U+1F1E8",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/LC.svg",
+      },
+      {
+        name: "Liechtenstein",
+        code: "LI",
+        emoji: "🇱🇮",
+        unicode: "U+1F1F1 U+1F1EE",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/LI.svg",
+      },
+      {
+        name: "Sri Lanka",
+        code: "LK",
+        emoji: "🇱🇰",
+        unicode: "U+1F1F1 U+1F1F0",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/LK.svg",
+      },
+      {
+        name: "Liberia",
+        code: "LR",
+        emoji: "🇱🇷",
+        unicode: "U+1F1F1 U+1F1F7",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/LR.svg",
+      },
+      {
+        name: "Lesotho",
+        code: "LS",
+        emoji: "🇱🇸",
+        unicode: "U+1F1F1 U+1F1F8",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/LS.svg",
+      },
+      {
+        name: "Lithuania",
+        code: "LT",
+        emoji: "🇱🇹",
+        unicode: "U+1F1F1 U+1F1F9",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/LT.svg",
+      },
+      {
+        name: "Luxembourg",
+        code: "LU",
+        emoji: "🇱🇺",
+        unicode: "U+1F1F1 U+1F1FA",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/LU.svg",
+      },
+      {
+        name: "Latvia",
+        code: "LV",
+        emoji: "🇱🇻",
+        unicode: "U+1F1F1 U+1F1FB",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/LV.svg",
+      },
+      {
+        name: "Libya",
+        code: "LY",
+        emoji: "🇱🇾",
+        unicode: "U+1F1F1 U+1F1FE",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/LY.svg",
+      },
+      {
+        name: "Morocco",
+        code: "MA",
+        emoji: "🇲🇦",
+        unicode: "U+1F1F2 U+1F1E6",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/MA.svg",
+      },
+      {
+        name: "Monaco",
+        code: "MC",
+        emoji: "🇲🇨",
+        unicode: "U+1F1F2 U+1F1E8",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/MC.svg",
+      },
+      {
+        name: "Moldova",
+        code: "MD",
+        emoji: "🇲🇩",
+        unicode: "U+1F1F2 U+1F1E9",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/MD.svg",
+      },
+      {
+        name: "Montenegro",
+        code: "ME",
+        emoji: "🇲🇪",
+        unicode: "U+1F1F2 U+1F1EA",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/ME.svg",
+      },
+      {
+        name: "St. Martin",
+        code: "MF",
+        emoji: "🇲🇫",
+        unicode: "U+1F1F2 U+1F1EB",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/MF.svg",
+      },
+      {
+        name: "Madagascar",
+        code: "MG",
+        emoji: "🇲🇬",
+        unicode: "U+1F1F2 U+1F1EC",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/MG.svg",
+      },
+      {
+        name: "Marshall Islands",
+        code: "MH",
+        emoji: "🇲🇭",
+        unicode: "U+1F1F2 U+1F1ED",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/MH.svg",
+      },
+      {
+        name: "North Macedonia",
+        code: "MK",
+        emoji: "🇲🇰",
+        unicode: "U+1F1F2 U+1F1F0",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/MK.svg",
+      },
+      {
+        name: "Mali",
+        code: "ML",
+        emoji: "🇲🇱",
+        unicode: "U+1F1F2 U+1F1F1",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/ML.svg",
+      },
+      {
+        name: "Myanmar (Burma)",
+        code: "MM",
+        emoji: "🇲🇲",
+        unicode: "U+1F1F2 U+1F1F2",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/MM.svg",
+      },
+      {
+        name: "Mongolia",
+        code: "MN",
+        emoji: "🇲🇳",
+        unicode: "U+1F1F2 U+1F1F3",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/MN.svg",
+      },
+      {
+        name: "Macao SAR China",
+        code: "MO",
+        emoji: "🇲🇴",
+        unicode: "U+1F1F2 U+1F1F4",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/MO.svg",
+      },
+      {
+        name: "Northern Mariana Islands",
+        code: "MP",
+        emoji: "🇲🇵",
+        unicode: "U+1F1F2 U+1F1F5",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/MP.svg",
+      },
+      {
+        name: "Martinique",
+        code: "MQ",
+        emoji: "🇲🇶",
+        unicode: "U+1F1F2 U+1F1F6",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/MQ.svg",
+      },
+      {
+        name: "Mauritania",
+        code: "MR",
+        emoji: "🇲🇷",
+        unicode: "U+1F1F2 U+1F1F7",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/MR.svg",
+      },
+      {
+        name: "Montserrat",
+        code: "MS",
+        emoji: "🇲🇸",
+        unicode: "U+1F1F2 U+1F1F8",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/MS.svg",
+      },
+      {
+        name: "Malta",
+        code: "MT",
+        emoji: "🇲🇹",
+        unicode: "U+1F1F2 U+1F1F9",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/MT.svg",
+      },
+      {
+        name: "Mauritius",
+        code: "MU",
+        emoji: "🇲🇺",
+        unicode: "U+1F1F2 U+1F1FA",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/MU.svg",
+      },
+      {
+        name: "Maldives",
+        code: "MV",
+        emoji: "🇲🇻",
+        unicode: "U+1F1F2 U+1F1FB",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/MV.svg",
+      },
+      {
+        name: "Malawi",
+        code: "MW",
+        emoji: "🇲🇼",
+        unicode: "U+1F1F2 U+1F1FC",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/MW.svg",
+      },
+      {
+        name: "Mexico",
+        code: "MX",
+        emoji: "🇲🇽",
+        unicode: "U+1F1F2 U+1F1FD",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/MX.svg",
+      },
+      {
+        name: "Malaysia",
+        code: "MY",
+        emoji: "🇲🇾",
+        unicode: "U+1F1F2 U+1F1FE",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/MY.svg",
+      },
+      {
+        name: "Mozambique",
+        code: "MZ",
+        emoji: "🇲🇿",
+        unicode: "U+1F1F2 U+1F1FF",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/MZ.svg",
+      },
+      {
+        name: "Namibia",
+        code: "NA",
+        emoji: "🇳🇦",
+        unicode: "U+1F1F3 U+1F1E6",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/NA.svg",
+      },
+      {
+        name: "New Caledonia",
+        code: "NC",
+        emoji: "🇳🇨",
+        unicode: "U+1F1F3 U+1F1E8",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/NC.svg",
+      },
+      {
+        name: "Niger",
+        code: "NE",
+        emoji: "🇳🇪",
+        unicode: "U+1F1F3 U+1F1EA",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/NE.svg",
+      },
+      {
+        name: "Norfolk Island",
+        code: "NF",
+        emoji: "🇳🇫",
+        unicode: "U+1F1F3 U+1F1EB",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/NF.svg",
+      },
+      {
+        name: "Nigeria",
+        code: "NG",
+        emoji: "🇳🇬",
+        unicode: "U+1F1F3 U+1F1EC",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/NG.svg",
+      },
+      {
+        name: "Nicaragua",
+        code: "NI",
+        emoji: "🇳🇮",
+        unicode: "U+1F1F3 U+1F1EE",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/NI.svg",
+      },
+      {
+        name: "Netherlands",
+        code: "NL",
+        emoji: "🇳🇱",
+        unicode: "U+1F1F3 U+1F1F1",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/NL.svg",
+      },
+      {
+        name: "Norway",
+        code: "NO",
+        emoji: "🇳🇴",
+        unicode: "U+1F1F3 U+1F1F4",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/NO.svg",
+      },
+      {
+        name: "Nepal",
+        code: "NP",
+        emoji: "🇳🇵",
+        unicode: "U+1F1F3 U+1F1F5",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/NP.svg",
+      },
+      {
+        name: "Nauru",
+        code: "NR",
+        emoji: "🇳🇷",
+        unicode: "U+1F1F3 U+1F1F7",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/NR.svg",
+      },
+      {
+        name: "Niue",
+        code: "NU",
+        emoji: "🇳🇺",
+        unicode: "U+1F1F3 U+1F1FA",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/NU.svg",
+      },
+      {
+        name: "New Zealand",
+        code: "NZ",
+        emoji: "🇳🇿",
+        unicode: "U+1F1F3 U+1F1FF",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/NZ.svg",
+      },
+      {
+        name: "Oman",
+        code: "OM",
+        emoji: "🇴🇲",
+        unicode: "U+1F1F4 U+1F1F2",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/OM.svg",
+      },
+      {
+        name: "Panama",
+        code: "PA",
+        emoji: "🇵🇦",
+        unicode: "U+1F1F5 U+1F1E6",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/PA.svg",
+      },
+      {
+        name: "Peru",
+        code: "PE",
+        emoji: "🇵🇪",
+        unicode: "U+1F1F5 U+1F1EA",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/PE.svg",
+      },
+      {
+        name: "French Polynesia",
+        code: "PF",
+        emoji: "🇵🇫",
+        unicode: "U+1F1F5 U+1F1EB",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/PF.svg",
+      },
+      {
+        name: "Papua New Guinea",
+        code: "PG",
+        emoji: "🇵🇬",
+        unicode: "U+1F1F5 U+1F1EC",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/PG.svg",
+      },
+      {
+        name: "Philippines",
+        code: "PH",
+        emoji: "🇵🇭",
+        unicode: "U+1F1F5 U+1F1ED",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/PH.svg",
+      },
+      {
+        name: "Pakistan",
+        code: "PK",
+        emoji: "🇵🇰",
+        unicode: "U+1F1F5 U+1F1F0",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/PK.svg",
+      },
+      {
+        name: "Poland",
+        code: "PL",
+        emoji: "🇵🇱",
+        unicode: "U+1F1F5 U+1F1F1",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/PL.svg",
+      },
+      {
+        name: "St. Pierre & Miquelon",
+        code: "PM",
+        emoji: "🇵🇲",
+        unicode: "U+1F1F5 U+1F1F2",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/PM.svg",
+      },
+      {
+        name: "Pitcairn Islands",
+        code: "PN",
+        emoji: "🇵🇳",
+        unicode: "U+1F1F5 U+1F1F3",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/PN.svg",
+      },
+      {
+        name: "Puerto Rico",
+        code: "PR",
+        emoji: "🇵🇷",
+        unicode: "U+1F1F5 U+1F1F7",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/PR.svg",
+      },
+      {
+        name: "Palestinian Territories",
+        code: "PS",
+        emoji: "🇵🇸",
+        unicode: "U+1F1F5 U+1F1F8",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/PS.svg",
+      },
+      {
+        name: "Portugal",
+        code: "PT",
+        emoji: "🇵🇹",
+        unicode: "U+1F1F5 U+1F1F9",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/PT.svg",
+      },
+      {
+        name: "Palau",
+        code: "PW",
+        emoji: "🇵🇼",
+        unicode: "U+1F1F5 U+1F1FC",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/PW.svg",
+      },
+      {
+        name: "Paraguay",
+        code: "PY",
+        emoji: "🇵🇾",
+        unicode: "U+1F1F5 U+1F1FE",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/PY.svg",
+      },
+      {
+        name: "Qatar",
+        code: "QA",
+        emoji: "🇶🇦",
+        unicode: "U+1F1F6 U+1F1E6",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/QA.svg",
+      },
+      {
+        name: "Réunion",
+        code: "RE",
+        emoji: "🇷🇪",
+        unicode: "U+1F1F7 U+1F1EA",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/RE.svg",
+      },
+      {
+        name: "Romania",
+        code: "RO",
+        emoji: "🇷🇴",
+        unicode: "U+1F1F7 U+1F1F4",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/RO.svg",
+      },
+      {
+        name: "Serbia",
+        code: "RS",
+        emoji: "🇷🇸",
+        unicode: "U+1F1F7 U+1F1F8",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/RS.svg",
+      },
+      {
+        name: "Russia",
+        code: "RU",
+        emoji: "🇷🇺",
+        unicode: "U+1F1F7 U+1F1FA",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/RU.svg",
+      },
+      {
+        name: "Rwanda",
+        code: "RW",
+        emoji: "🇷🇼",
+        unicode: "U+1F1F7 U+1F1FC",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/RW.svg",
+      },
+      {
+        name: "Saudi Arabia",
+        code: "SA",
+        emoji: "🇸🇦",
+        unicode: "U+1F1F8 U+1F1E6",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/SA.svg",
+      },
+      {
+        name: "Solomon Islands",
+        code: "SB",
+        emoji: "🇸🇧",
+        unicode: "U+1F1F8 U+1F1E7",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/SB.svg",
+      },
+      {
+        name: "Seychelles",
+        code: "SC",
+        emoji: "🇸🇨",
+        unicode: "U+1F1F8 U+1F1E8",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/SC.svg",
+      },
+      {
+        name: "Sudan",
+        code: "SD",
+        emoji: "🇸🇩",
+        unicode: "U+1F1F8 U+1F1E9",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/SD.svg",
+      },
+      {
+        name: "Sweden",
+        code: "SE",
+        emoji: "🇸🇪",
+        unicode: "U+1F1F8 U+1F1EA",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/SE.svg",
+      },
+      {
+        name: "Singapore",
+        code: "SG",
+        emoji: "🇸🇬",
+        unicode: "U+1F1F8 U+1F1EC",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/SG.svg",
+      },
+      {
+        name: "St. Helena",
+        code: "SH",
+        emoji: "🇸🇭",
+        unicode: "U+1F1F8 U+1F1ED",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/SH.svg",
+      },
+      {
+        name: "Slovenia",
+        code: "SI",
+        emoji: "🇸🇮",
+        unicode: "U+1F1F8 U+1F1EE",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/SI.svg",
+      },
+      {
+        name: "Svalbard & Jan Mayen",
+        code: "SJ",
+        emoji: "🇸🇯",
+        unicode: "U+1F1F8 U+1F1EF",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/SJ.svg",
+      },
+      {
+        name: "Slovakia",
+        code: "SK",
+        emoji: "🇸🇰",
+        unicode: "U+1F1F8 U+1F1F0",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/SK.svg",
+      },
+      {
+        name: "Sierra Leone",
+        code: "SL",
+        emoji: "🇸🇱",
+        unicode: "U+1F1F8 U+1F1F1",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/SL.svg",
+      },
+      {
+        name: "San Marino",
+        code: "SM",
+        emoji: "🇸🇲",
+        unicode: "U+1F1F8 U+1F1F2",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/SM.svg",
+      },
+      {
+        name: "Senegal",
+        code: "SN",
+        emoji: "🇸🇳",
+        unicode: "U+1F1F8 U+1F1F3",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/SN.svg",
+      },
+      {
+        name: "Somalia",
+        code: "SO",
+        emoji: "🇸🇴",
+        unicode: "U+1F1F8 U+1F1F4",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/SO.svg",
+      },
+      {
+        name: "Suriname",
+        code: "SR",
+        emoji: "🇸🇷",
+        unicode: "U+1F1F8 U+1F1F7",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/SR.svg",
+      },
+      {
+        name: "South Sudan",
+        code: "SS",
+        emoji: "🇸🇸",
+        unicode: "U+1F1F8 U+1F1F8",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/SS.svg",
+      },
+      {
+        name: "São Tomé & Príncipe",
+        code: "ST",
+        emoji: "🇸🇹",
+        unicode: "U+1F1F8 U+1F1F9",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/ST.svg",
+      },
+      {
+        name: "El Salvador",
+        code: "SV",
+        emoji: "🇸🇻",
+        unicode: "U+1F1F8 U+1F1FB",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/SV.svg",
+      },
+      {
+        name: "Sint Maarten",
+        code: "SX",
+        emoji: "🇸🇽",
+        unicode: "U+1F1F8 U+1F1FD",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/SX.svg",
+      },
+      {
+        name: "Syria",
+        code: "SY",
+        emoji: "🇸🇾",
+        unicode: "U+1F1F8 U+1F1FE",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/SY.svg",
+      },
+      {
+        name: "Eswatini",
+        code: "SZ",
+        emoji: "🇸🇿",
+        unicode: "U+1F1F8 U+1F1FF",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/SZ.svg",
+      },
+      {
+        name: "Tristan da Cunha",
+        code: "TA",
+        emoji: "🇹🇦",
+        unicode: "U+1F1F9 U+1F1E6",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/TA.svg",
+      },
+      {
+        name: "Turks & Caicos Islands",
+        code: "TC",
+        emoji: "🇹🇨",
+        unicode: "U+1F1F9 U+1F1E8",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/TC.svg",
+      },
+      {
+        name: "Chad",
+        code: "TD",
+        emoji: "🇹🇩",
+        unicode: "U+1F1F9 U+1F1E9",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/TD.svg",
+      },
+      {
+        name: "French Southern Territories",
+        code: "TF",
+        emoji: "🇹🇫",
+        unicode: "U+1F1F9 U+1F1EB",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/TF.svg",
+      },
+      {
+        name: "Togo",
+        code: "TG",
+        emoji: "🇹🇬",
+        unicode: "U+1F1F9 U+1F1EC",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/TG.svg",
+      },
+      {
+        name: "Thailand",
+        code: "TH",
+        emoji: "🇹🇭",
+        unicode: "U+1F1F9 U+1F1ED",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/TH.svg",
+      },
+      {
+        name: "Tajikistan",
+        code: "TJ",
+        emoji: "🇹🇯",
+        unicode: "U+1F1F9 U+1F1EF",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/TJ.svg",
+      },
+      {
+        name: "Tokelau",
+        code: "TK",
+        emoji: "🇹🇰",
+        unicode: "U+1F1F9 U+1F1F0",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/TK.svg",
+      },
+      {
+        name: "Timor-Leste",
+        code: "TL",
+        emoji: "🇹🇱",
+        unicode: "U+1F1F9 U+1F1F1",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/TL.svg",
+      },
+      {
+        name: "Turkmenistan",
+        code: "TM",
+        emoji: "🇹🇲",
+        unicode: "U+1F1F9 U+1F1F2",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/TM.svg",
+      },
+      {
+        name: "Tunisia",
+        code: "TN",
+        emoji: "🇹🇳",
+        unicode: "U+1F1F9 U+1F1F3",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/TN.svg",
+      },
+      {
+        name: "Tonga",
+        code: "TO",
+        emoji: "🇹🇴",
+        unicode: "U+1F1F9 U+1F1F4",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/TO.svg",
+      },
+      {
+        name: "Turkey",
+        code: "TR",
+        emoji: "🇹🇷",
+        unicode: "U+1F1F9 U+1F1F7",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/TR.svg",
+      },
+      {
+        name: "Trinidad & Tobago",
+        code: "TT",
+        emoji: "🇹🇹",
+        unicode: "U+1F1F9 U+1F1F9",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/TT.svg",
+      },
+      {
+        name: "Tuvalu",
+        code: "TV",
+        emoji: "🇹🇻",
+        unicode: "U+1F1F9 U+1F1FB",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/TV.svg",
+      },
+      {
+        name: "Taiwan",
+        code: "TW",
+        emoji: "🇹🇼",
+        unicode: "U+1F1F9 U+1F1FC",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/TW.svg",
+      },
+      {
+        name: "Tanzania",
+        code: "TZ",
+        emoji: "🇹🇿",
+        unicode: "U+1F1F9 U+1F1FF",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/TZ.svg",
+      },
+      {
+        name: "Ukraine",
+        code: "UA",
+        emoji: "🇺🇦",
+        unicode: "U+1F1FA U+1F1E6",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/UA.svg",
+      },
+      {
+        name: "Uganda",
+        code: "UG",
+        emoji: "🇺🇬",
+        unicode: "U+1F1FA U+1F1EC",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/UG.svg",
+      },
+      {
+        name: "U.S. Outlying Islands",
+        code: "UM",
+        emoji: "🇺🇲",
+        unicode: "U+1F1FA U+1F1F2",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/UM.svg",
+      },
+      {
+        name: "United Nations",
+        code: "UN",
+        emoji: "🇺🇳",
+        unicode: "U+1F1FA U+1F1F3",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/UN.svg",
+      },
+      {
+        name: "United States",
+        code: "US",
+        emoji: "🇺🇸",
+        unicode: "U+1F1FA U+1F1F8",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/US.svg",
+      },
+      {
+        name: "Uruguay",
+        code: "UY",
+        emoji: "🇺🇾",
+        unicode: "U+1F1FA U+1F1FE",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/UY.svg",
+      },
+      {
+        name: "Uzbekistan",
+        code: "UZ",
+        emoji: "🇺🇿",
+        unicode: "U+1F1FA U+1F1FF",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/UZ.svg",
+      },
+      {
+        name: "Vatican City",
+        code: "VA",
+        emoji: "🇻🇦",
+        unicode: "U+1F1FB U+1F1E6",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/VA.svg",
+      },
+      {
+        name: "St. Vincent & Grenadines",
+        code: "VC",
+        emoji: "🇻🇨",
+        unicode: "U+1F1FB U+1F1E8",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/VC.svg",
+      },
+      {
+        name: "Venezuela",
+        code: "VE",
+        emoji: "🇻🇪",
+        unicode: "U+1F1FB U+1F1EA",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/VE.svg",
+      },
+      {
+        name: "British Virgin Islands",
+        code: "VG",
+        emoji: "🇻🇬",
+        unicode: "U+1F1FB U+1F1EC",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/VG.svg",
+      },
+      {
+        name: "U.S. Virgin Islands",
+        code: "VI",
+        emoji: "🇻🇮",
+        unicode: "U+1F1FB U+1F1EE",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/VI.svg",
+      },
+      {
+        name: "Vietnam",
+        code: "VN",
+        emoji: "🇻🇳",
+        unicode: "U+1F1FB U+1F1F3",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/VN.svg",
+      },
+      {
+        name: "Vanuatu",
+        code: "VU",
+        emoji: "🇻🇺",
+        unicode: "U+1F1FB U+1F1FA",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/VU.svg",
+      },
+      {
+        name: "Wallis & Futuna",
+        code: "WF",
+        emoji: "🇼🇫",
+        unicode: "U+1F1FC U+1F1EB",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/WF.svg",
+      },
+      {
+        name: "Samoa",
+        code: "WS",
+        emoji: "🇼🇸",
+        unicode: "U+1F1FC U+1F1F8",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/WS.svg",
+      },
+      {
+        name: "Kosovo",
+        code: "XK",
+        emoji: "🇽🇰",
+        unicode: "U+1F1FD U+1F1F0",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/XK.svg",
+      },
+      {
+        name: "Yemen",
+        code: "YE",
+        emoji: "🇾🇪",
+        unicode: "U+1F1FE U+1F1EA",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/YE.svg",
+      },
+      {
+        name: "Mayotte",
+        code: "YT",
+        emoji: "🇾🇹",
+        unicode: "U+1F1FE U+1F1F9",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/YT.svg",
+      },
+      {
+        name: "South Africa",
+        code: "ZA",
+        emoji: "🇿🇦",
+        unicode: "U+1F1FF U+1F1E6",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/ZA.svg",
+      },
+      {
+        name: "Zambia",
+        code: "ZM",
+        emoji: "🇿🇲",
+        unicode: "U+1F1FF U+1F1F2",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/ZM.svg",
+      },
+      {
+        name: "Zimbabwe",
+        code: "ZW",
+        emoji: "🇿🇼",
+        unicode: "U+1F1FF U+1F1FC",
+        image:
+          "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/ZW.svg",
+      },
+    ];
+
+    const countryData = shuffleArray(originalCountryData);
+    function shuffleArray(array) {
+      let currentIndex = array.length, randomIndex;
+
+      // While there remain elements to shuffle.
+      while (currentIndex != 0) {
+
+        // Pick a remaining element.
+        randomIndex = Math.floor(Math.random() * currentIndex);
+        currentIndex--;
+
+        // And swap it with the current element.
+        [array[currentIndex], array[randomIndex]] = [
+          array[randomIndex], array[currentIndex]];
+      }
+
+      return array;
+    }
+    const apiKey = "3pn0jnrpfjre";
+
+    let allData = "";
+    const chunkSize = 20;
+    let temp = ``;
+    const totalChunksForGlobalSighting = countryData.length / chunkSize ?? 1;
+
+    /** 
+     * get checklist ID with subId
+     * @param subId, if subId is not defined, or null, it returns null
+    */
+    async function getChecklistID(subid) {
+      if (!subid || subid == '') return null;
+      if (subid) {
+        const url = `https://api.ebird.org/v2/product/checklist/view/${subid}`;
+        const headers = new Headers({
+          "X-eBirdApiToken": apiKey,
+        });
+        try {
+          const response = await fetch(url, { headers });
+          const data = await response.json();
+          return data;
+        } catch (error) {
+          console.error("Error fetching recent sightings:", error);
+        }
+      }
+    }
+
+    /** 
+     * get global sightings with country code, there is an error with country code `US`, if api is not successful, it console errors
+    */
+    async function getGlobalSightings(countryCode, maxResults, country = "") {
+      const url = `https://api.ebird.org/v2/data/obs/${countryCode}/recent?includeProvisional=false&maxResults=${maxResults}`;
+      const headers = new Headers({
+        "X-eBirdApiToken": apiKey,
+      });
+
+      try {
+        const response = await fetch(url, { headers });
+        if (response.ok) {
+          const data = await response.json();
+          let speciesArr = [];
+          for (let i = 0; i < data.length; i++) {
+            speciesArr.push(data[i].speciesCode);
+          }
+          const speciesString = speciesArr.join(",");
+          const promises = data.map(async (item, idx) => {
+            const result = await getBirdPhotoAndTime(speciesString, item.lat, item.lng, item.obsDt);
+            if (result) {
+              return {
+                ...item,
+                photoSrc: `https://cdn.download.ams.birds.cornell.edu/api/v2/asset/${result[item.speciesCode].assetId
+                  }/2400`,
+                country: country,
+                obsDt: result.utcTime,
+                photoOwner: result[item.speciesCode].userDisplayName
+              };
+            }
+          });
+          const res = await Promise.all(promises);
+          return res;
+        }
+      } catch (error) {
+        console.error("Error fetching recent sightings:", error);
+      }
+    }
+
+
+    async function getRecentSightings(lat, lng, dist, maxResults) {
+      const url = `https://api.ebird.org/v2/data/obs/geo/recent?lat=${lat}&lng=${lng}&dist=${dist}&category=species&includeProvisional=true&maxResults=${maxResults}`;
+      const headers = new Headers({
+        "X-eBirdApiToken": apiKey,
+      });
+
+      try {
+        const response = await fetch(url, { headers });
+        const data = await response.json();
+        console.log("data", data)
+        if (data.length < 1) return
+        let speciesArr = [];
+        for (let i = 0; i < data.length; i++) {
+          speciesArr.push(data[i].speciesCode);
+        }
+        const speciesString = speciesArr.join(",");
+        const result = await getBirdPhoto(speciesString);
+        const res = data.map((item, idx) => {
+          return {
+            ...item,
+            photoSrc: `https://cdn.download.ams.birds.cornell.edu/api/v2/asset/${result[item.speciesCode]?.assetId
+              }/2400`,
+            userDisplayName: result[item.speciesCode]?.userDisplayName
+          };
+        });
+        return res;
+      } catch (error) {
+        console.error("Error fetching recent sightings:", error);
+      }
+    }
+
+    async function getBirdPhoto(speciesCode) {
+      var url =
+        "https://merlinglobe-1ab0512223a0.herokuapp.com/api/get_bird_photo";
+      const params = {
+        key: "PUB1258538706",
+        speciesCode: speciesCode,
+        mediaType: "illustration",
+      };
+      try {
+        const queryString = new URLSearchParams(params).toString();
+        const response = await fetch(`${url}?${queryString}`);
+        return await response.json();
+      } catch (error) {
+        console.error("Error fetching", error);
+      }
+    }
+
+    /**
+     * Get Bird Photo and UTC time from backend with speciesCode, lat, lng, localTime
+    */
+    async function getBirdPhotoAndTime(speciesCode, lat, lng, localTime) {
+      if (speciesCode) {
+        const url =
+          "https://merlinglobe-1ab0512223a0.herokuapp.com/api/get_bird_photo";
+        // const url = "http://localhost:8000/api/get_bird_photo";
+        const params = {
+          key: "PUB1258538706",
+          speciesCode: speciesCode,
+          mediaType: "imageEssentialSet",
+          lat, lng, localTime
+        };
+        try {
+          const queryString = new URLSearchParams(params).toString();
+          const response = await fetch(`${url}?${queryString}`);
+          if (response.ok)
+            return await response.json();
+        } catch (error) {
+          console.error("Error fetching", error);
+        }
+      }
+    }
+
+    async function getLocationInfo(locId) {
+      const url = `https://api.ebird.org/v2/ref/region/info/${locId}`;
+      const headers = new Headers({
+        "X-eBirdApiToken": apiKey,
+      });
+      try {
+        const response = await fetch(url, { headers });
+        const data = await response.json();
+        return data;
+      } catch (error) {
+        console.log("Error fetching location info", error);
+      }
+    }
+
+    const fetchData = async (countryData) => {
+      const maxResults = 1;
+      const recentSightings = await getGlobalSightings(
+        countryData.code,
+        maxResults
+      );
+      // const currentLocation = document.getElementById("currentLocation");
+      // currentLocation.innerHTML = `<div class="row d-flex align-items-center ">${countryData.name}<img src="${countryData.image}" style="width: 50px"></div>`;
+      const birdInfoContainer = document.getElementById("birdInfoContainer");
+      let birdInfo = "";
+      for (let i = 0; i < recentSightings.length; i++) {
+        const data = recentSightings[i];
+        //   birdInfo += `<div style="display:flex; overflow:hidden" ><div class="" style="padding: 20px; width: 65%">
+        //   <div style="font-size: 24px; margin-bottom: 15px" id="bird-name">
+        //     ${data.comName}
+        //   </div>
+        //   <div class="card-body">
+        //                     <h5 class="card-title">${data.comName}</h5>
+        //                     <p class="card-text my-0">Public Display Name: ${data.sciName}</p>
+        //                     <p class="card-text my-0">Locatiion: ${data.locName}</p>
+        //                     <p class="card-text my-0">Country: ${countryData.name}</p>
+        //                     </div>
+        //   <div
+        //     style="
+        //       display: flex;
+        //       margin-top: 40px;
+        //       gap: 20px;
+        //       align-items: center;
+        //     "
+        //   >
+        //     <img width="80px" style="width: 80px!important" src="./qr.png" />
+        //     Download Merlin and eBird
+        //   </div>
+        // </div>
+        // <div style="width: 200px; max-height: 300px" id="bird-image"><img  height="100%" src="${data.photoSrc}" /></div></div>`;
+        if (i % 3 == 0)
+          birdInfo += `<div
+                            style="
+                              position: absolute;
+                              left: 0px;
+                              bottom: 40px;
+                              width: calc((100% - 80px) / 2);
+                              z-index: 1111;
+                            "
+                          >
+                            <div
+                              class=""
+                              style="display: flex; overflow: hidden; justify-content: center"
+                            >
+                              <div class="" style="padding: 20px; margin-top:-50px; width: 65%">
+                                <div>
+                                  Citizen science projects like eBird and tools like Merlin allow
+                                  anyone to be a part ofthe world-wide community of people enjoying
+                                  birds and nature right now.
+                                </div>
+                                <div
+                                  style="
+                                    display: flex;
+                                    margin-top: 40px;
+                                    gap: 20px;
+                                    align-items: center;
+                                  "
+                                >
+                                  <img width="80px" src="./qr.png" />
+                                  Download Merlin and eBird
+                                </div>
+                              </div>
+                            </div>
+                          </div>`;
+      }
+      return birdInfo;
+    };
+
+    async function chunckForGlobalSighting(chunkIndex = 0, maxResults = 1) {
+      if (chunkIndex >= totalChunksForGlobalSighting)
+        return;
+      const startIndex = chunkIndex * chunkSize;
+      const endIndex = Math.min(startIndex + chunkSize, countryData.length);
+      const chunk = countryData.slice(startIndex, endIndex);
+      const promises = chunk.map((countryCode) =>
+        getGlobalSightings(countryCode.code, maxResults, countryCode.name)
+      );
+      const originalResultsArray = await Promise.all(promises).then(data => data.flat());
+      const resultsArray = originalResultsArray.filter((item) => {
+        const observedAt = new Date(item.obsDt);
+        const now = new Date();
+        if ((now - observedAt) / (1000 * 60 * 60) < 12) {
+          return item;
+        }
+      }).sort((a, b) => {
+        const observedAtA = new Date(a.obsDt);
+        const observedAtB = new Date(b.obsDt);
+        return observedAtB - observedAtA;
+      });
+      console.log("resultsArray", resultsArray)
+
+      processChunk(resultsArray, (chunkHtmls) => {
+        temp += chunkHtmls.join('');
+        $("#birdInfoContainer").html(temp);
+        $("#birdInfoContainer")
+          .owlCarousel("destroy")
+          .owlCarousel({
+            animateIn: "fadeIn",
+            animateOut: "fadeOut",
+            smartSpeed: 200,
+            center: true,
+            items: 1,
+            loop: true,
+            stagePadding: 0,
+            margin: 20,
+            smartSpeed: 200,
+            autoplayTimeout: 10000,
+            autoplay: true,
+            nav: true,
+            dots: true,
+            pauseOnHover: false,
+            touchDrag: false,
+            mouseDrag: false,
+            navText: [
+              '<i class="fa fa-angle-left" aria-hidden="true"></i>',
+              '<i class="fa fa-angle-right" aria-hidden="true"></i>',
+            ],
+            navContainer: ".main-content .custom-nav",
+            responsive: {
+              600: {
+                margin: 20,
+                nav: true,
+                items: 1,
+              },
+              1000: {
+                margin: 20,
+                stagePadding: 0,
+                nav: true,
+                items: 1,
+              },
+            },
+          });
+      })
+      chunckForGlobalSighting(chunkIndex + 1);
+    }
+
+    function processChunk(chunk, fn) {
+      let promises = chunk.map(async (item, index) => {
+        const checklistData = await getChecklistID(item?.subId);
+        if (checklistData) {
+          let tempEbirds = '';
+          if (item) {
+            tempEbirds += `<div style="display:flex; overflow:hidden" >
+                          <div class="" style="padding: 20px; width: 65%; display: flex; flex-direction: column; gap:40px">
+                            <div style="font-size: 64px; margin-top:70px !important; margin-bottom: 10px; margin-left:50px !important;">Just Observed:</div>
+                            <div id="bird-name" style="font-size: 88px; margin-top:5px; margin-bottom: 15px; margin-left:50px !important; ">${item?.comName}</div>
+                            <p class="card-text my-0" style="font-size: 64px; margin-top:0px; margin-left:50px; margin-bottom: 10px;" >Location: ${item.country}</p>
+                            <p class="card-text my-0" style="font-size: 64px; margin-top:0px; margin-left:50px; margin-bottom: 10px;" >Shared: ${getTimeDifference(item.obsDt)}</p>
+                            <p class="card-text my-0" style="font-size: 64px; margin-top:0px; margin-left:50px; margin-bottom: 10px;" >eBirder: ${checklistData.userDisplayName}</p>
+                            <div
+                              style="
+                                display: flex;
+                                margin-top: 40px;
+                                gap: 20px;
+                                align-items: center;
+                              "
+                            >
+                            </div>
+                          </div>
+                          <div style="width: 900px; max-height: 600px; margin-top:80px; margin-right:60px;">
+                            <img  style="width: 100%; height: 100%; object-fit: contain;" src="${item.photoSrc}" />
+                            <span class="card-text my-0" style="display:block; height:50px; z-index:100; position:absolute; font-size:40px; margin-top:20px; margin-bottom:20px; ">${item.photoOwner} / Macaulay Library</span>
+                          </div>
+                        </div>`;
+          }
+          if (index % 3 == 2) {
+            tempEbirds += `
+                    <div
+                      class=""
+                      style="display: flex; overflow: hidden; justify-content: center; align-items: center;"
+                    >
+                      <div class="" style="padding: 20px; width: 65%; margin-top: 50px;">
+                        <div style="text-align:center; font-size:64px; margin-top: 25px;">
+                          Participatory science projects like eBird and tools like Merlin allow anyone to join the worldwide community of people enjoying birds and nature right now.
+                        </div>
+                        <div
+                          style="
+                            display: flex;
+                            margin-top: 40px;
+                            gap: 20px;
+                            align-items: center;
+                          "
+                        >
+                          <img style="max-width:600px; margin-top:80px; margin-right:100px;"  src="./cornell-lab-logo.svg"/>
+                          <img width="200px" style="max-width:200px; margin-top:80px; margin-left:100px;" src="./qr.png" />
+                          <span style="width:340px; font-size:40px; margin-left:20px;">Download Merlin and eBird</span>
+                        </div>
+                      </div>
+                    </div>`;
+          }
+          return tempEbirds;
+        }
+      });
+
+      Promise.all(promises)
+        .then(fn)
+        .catch(error => {
+          console.log('Error processing chunk:', error);
+        })
+    }
+
+    (async () => {
+      chunckForGlobalSighting(0);
+    })();
+  </script>
+  <script type="text/javascript" language="javascript">
+    $(function () {
+      $(this).bind("contextmenu", function (e) {
+        e.preventDefault();
+      });
+    });
+  </script>
+</body>
+
+</html>
