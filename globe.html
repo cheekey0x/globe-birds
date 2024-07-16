@@ -2968,7 +2968,7 @@
       if(resultsArray.length) justObserveds = [...justObserveds, ...resultsArray]
 
       if(!intialized) {
-        console.log('process chunk')
+        // console.log('process chunk')
         processChunk(justObserveds, (chunkHtmls) => {
           temp = chunkHtmls.join('') + temp;
           $("#birdInfoContainer").html(temp);
