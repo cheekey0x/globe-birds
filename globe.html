@@ -2885,11 +2885,60 @@
       return birdInfo;
     };
 
+    let justObserveds = []
+    let intialized = false
+
     async function chunckForGlobalSighting(chunkIndex = 0, maxResults = 1) {
       // console.log('chunkindex', chunkIndex)
       if (chunkIndex >= totalChunksForGlobalSighting) {
+        // console.log('process chunk finally')
+
+        processChunk(justObserveds, (chunkHtmls) => {
+          temp = chunkHtmls.join('');
+          $("#birdInfoContainer").html(temp);
+          $("#birdInfoContainer")
+            .owlCarousel("destroy")
+            .owlCarousel({
+              animateIn: "fadeIn",
+              animateOut: "fadeOut",
+              smartSpeed: 200,
+              center: true,
+              items: 1,
+              loop: true,
+              stagePadding: 0,
+              margin: 20,
+              smartSpeed: 200,
+              autoplayTimeout: 10000,
+              autoplay: true,
+              nav: true,
+              dots: true,
+              pauseOnHover: false,
+              touchDrag: false,
+              mouseDrag: false,
+              navText: [
+                '<i class="fa fa-angle-left" aria-hidden="true"></i>',
+                '<i class="fa fa-angle-right" aria-hidden="true"></i>',
+              ],
+              navContainer: ".main-content .custom-nav",
+              responsive: {
+                600: {
+                  margin: 20,
+                  nav: true,
+                  items: 1,
+                },
+                1000: {
+                  margin: 20,
+                  stagePadding: 0,
+                  nav: true,
+                  items: 1,
+                },
+              },
+            });
+        })
+        intialized = false
         setTimeout(() => {
           temp = ``
+          justObserveds = []
           chunckForGlobalSighting(0)
         }, 60 * 60 * 1000)
         return;
@@ -2906,7 +2955,7 @@
         let observedAt = new Date(item?.obsDt);
         const now = new Date(new Date().getTime() + new Date().getTimezoneOffset() * 60000);
         const diff = (now - new Date(item?.obsDt)) / (1000 * 60 * 60) ?? 1
-        if (diff < 2) {
+        if (diff < 2 && diff > 0) {
           return item;
         }
       }).sort((a, b) => {
@@ -2916,48 +2965,55 @@
       });
       // console.log("resultsArray", resultsArray)
 
-      processChunk(resultsArray, (chunkHtmls) => {
-        temp = chunkHtmls.join('') + temp;
-        $("#birdInfoContainer").html(temp);
-        $("#birdInfoContainer")
-          .owlCarousel("destroy")
-          .owlCarousel({
-            animateIn: "fadeIn",
-            animateOut: "fadeOut",
-            smartSpeed: 200,
-            center: true,
-            items: 1,
-            loop: true,
-            stagePadding: 0,
-            margin: 20,
-            smartSpeed: 200,
-            autoplayTimeout: 10000,
-            autoplay: true,
-            nav: true,
-            dots: true,
-            pauseOnHover: false,
-            touchDrag: false,
-            mouseDrag: false,
-            navText: [
-              '<i class="fa fa-angle-left" aria-hidden="true"></i>',
-              '<i class="fa fa-angle-right" aria-hidden="true"></i>',
-            ],
-            navContainer: ".main-content .custom-nav",
-            responsive: {
-              600: {
-                margin: 20,
-                nav: true,
-                items: 1,
+      if(resultsArray.length) justObserveds = [...justObserveds, ...resultsArray]
+
+      if(!intialized) {
+        console.log('process chunk')
+        processChunk(justObserveds, (chunkHtmls) => {
+          temp = chunkHtmls.join('') + temp;
+          $("#birdInfoContainer").html(temp);
+          // $("#birdInfoContainer").trigger('add.owl.carousel', [$(temp), 0]).trigger('refresh.owl.carousel');
+          $("#birdInfoContainer")
+            .owlCarousel("destroy")
+            .owlCarousel({
+              animateIn: "fadeIn",
+              animateOut: "fadeOut",
+              smartSpeed: 200,
+              center: true,
+              items: 1,
+              loop: true,
+              stagePadding: 0,
+              margin: 20,
+              smartSpeed: 200,
+              autoplayTimeout: 10000,
+              autoplay: true,
+              nav: true,
+              dots: true,
+              pauseOnHover: false,
+              touchDrag: false,
+              mouseDrag: false,
+              navText: [
+                '<i class="fa fa-angle-left" aria-hidden="true"></i>',
+                '<i class="fa fa-angle-right" aria-hidden="true"></i>',
+              ],
+              navContainer: ".main-content .custom-nav",
+              responsive: {
+                600: {
+                  margin: 20,
+                  nav: true,
+                  items: 1,
+                },
+                1000: {
+                  margin: 20,
+                  stagePadding: 0,
+                  nav: true,
+                  items: 1,
+                },
               },
-              1000: {
-                margin: 20,
-                stagePadding: 0,
-                nav: true,
-                items: 1,
-              },
-            },
-          });
-      })
+            });
+        })
+        if(justObserveds.length) intialized = true
+      }
       chunckForGlobalSighting(chunkIndex + 1);
     }
 
