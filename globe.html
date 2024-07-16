@@ -389,7 +389,7 @@
     world.controls().enableZoom = false;
     function parseCoords() {
       const {x, y, z} = world?.cameraPosition();
-      if((x > -10 && x < 10) && (y < -340 && y > -350)) {
+      if((x > -10 && x < 10) && ((y < -340 && y > -350) || (y > 340 && y < 350))) {
         gbStoppingStatus += 1
       } else gbStoppingStatus = 0
       if(gbStoppingStatus == 5)  moveTointiPos()
