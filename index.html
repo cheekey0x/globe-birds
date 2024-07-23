@@ -16,8 +16,9 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <link rel="stylesheet" href="https://use.typekit.net/gxw1gdu.css" />
-
-  <title>bird</title>
+  <link rel="shortcut icon" href="favicon.png" type="image/x-icon">
+  <link rel="icon" type="image/png" href="favicon.png" sizes="192x192">
+  <title>CornellLab eBird</title>
   <style>
     * {
       -ms-touch-action: none;
@@ -325,7 +326,7 @@
                     color: #2d2620 !important;
                     font-weight: 200;
                   ">
-                Check out your observation on the big screen
+                Check your observation above
               </div>
               <div class="text-center my-4">
                 <button class="text-center btn btn-success" style="
@@ -723,6 +724,7 @@
           );
           const data = res.appearedBirds.slice(0, 50);
           let combineArray = temp.concat(data);
+          combineArray = combineArray.filter(t => !t.loc)
           let html = "";
           for (let i = 0; i < combineArray.length; i++) {
             if (i % 10 == 0) {
@@ -858,11 +860,11 @@
           for (let i = 0; i < combineArray.length; i++) {
             if (i % 10 == 0) {
               html += combineArray[i]?.loc
-                ? "<div style='background-color: rgba(255, 188, 16, 1); height: 100%; padding-top:10px; padding-left:50px; padding-right:50px;'>"
-                : "<div style='background-color: rgb(117, 159, 191); height: 100%; padding-top:10px; padding-left:50px; padding-right:50px;'>";
+                ? "<div style='background-color: rgba(117, 159, 191); height: 100%; padding-top:10px; padding-left:50px; padding-right:50px;'>"
+                : "<div style='background-color: rgb(255, 188, 16, 1); height: 100%; padding-top:10px; padding-left:50px; padding-right:50px;'>";
               html += combineArray[i]?.loc
-                ? '<div class="text-primary py-4 text-center" style="font-size: 150px; color:#2d2620 !important; text-align: left !important; letter-spacing: .02em; margin-bottom:5px;">Your Bird Observations</div>'
-                : '<div class="text-primary py-4 text-center" style="font-size: 150px; color:#2d2620 !important; text-align: left !important; letter-spacing: .02em; margin-bottom:5px;">Local Bird Observations</div>';
+                ? '<div class="text-primary py-4 text-center" style="font-size: 150px; color:#2d2620 !important; text-align: left !important; letter-spacing: .02em; margin-bottom:5px;">Local Bird Observations</div>'
+                : '<div class="text-primary py-4 text-center" style="font-size: 150px; color:#2d2620 !important; text-align: left !important; letter-spacing: .02em; margin-bottom:5px;">Your Bird Observations</div>';
               html +=
                 "<div class=' border-bottom border-dark p-1 d-flex  align-items-center justify-content-between'>";
               html += "<div style='flex:1.5; font-size: 64px;'>Species</div>";

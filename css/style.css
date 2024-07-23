@@ -51,7 +51,7 @@
   height: 70px;
   position: absolute;
   top: 1420px;
-  right: 480px;
+  right: 360px;
   z-index: 999;
 	opacity: .2;
 }
@@ -231,10 +231,7 @@ max-width: 400px !important;
 }
 
 #step-2-image img{
-width: 260px !important;
-height: 260px !important;
-margin-top: 60px;
-	margin-left: 10px;
+width: 100% !important; height: 100% !important; object-fit: contain; padding:55px;
 
 }
 
